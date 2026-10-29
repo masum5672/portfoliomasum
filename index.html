@@ -1,0 +1,3574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>MD EMAM MASUM | Portfolio OS</title>
+<meta name="description" content="Portfolio of MD Emam Masum — IoT & Embedded Systems Engineer, Web Developer, and Final Year CSE Student at BAUST. Creator of AgroSense AI smart farming system.">
+<meta name="theme-color" content="#f59e0b">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+<link rel="shortcut icon" href="favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Masum OS">
+<meta name="application-name" content="Masum OS">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json">
+<style>
+/* ==========================================================================
+   DESIGN TOKENS & DUAL-THEME ARCHITECTURE (STRICT DARK & LIGHT MATCHING)
+   ========================================================================== */
+:root[data-theme="dark"]{
+  --bg: #07090e;
+  --bg-gradient: radial-gradient(circle at 15% 15%, rgba(56,243,255,0.12), transparent 45%), radial-gradient(circle at 85% 85%, rgba(212,175,55,0.12), transparent 45%), linear-gradient(165deg, #06080d 0%, #0c111a 50%, #07090e 100%);
+  --surface: #0f141f;
+  --surface2: #161e2e;
+  --surface3: #1f293d;
+  --text: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --muted: #94a3b8;
+  --primary: #f59e0b;
+  --primary-contrast: #000000;
+  --primary-glow: rgba(245, 158, 11, 0.35);
+  --neon1: #84cc16;
+  --neon1-glow: rgba(132, 204, 22, 0.35);
+  --neon2: #06b6d4;
+  --neon2-glow: rgba(6, 182, 212, 0.35);
+  --border: rgba(255, 255, 255, 0.09);
+  --border-strong: rgba(255, 255, 255, 0.18);
+  --card: #101623;
+  --card-hover: #151d2d;
+  --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7);
+  --nav-bg: rgba(9, 13, 20, 0.88);
+  --overlay-bg: rgba(3, 6, 12, 0.82);
+  --input-bg: #141b2a;
+}
+:root[data-theme="light"]{
+  --bg: #f8fafc;
+  --bg-gradient: radial-gradient(circle at 15% 15%, rgba(2, 132, 199, 0.08), transparent 45%), radial-gradient(circle at 85% 85%, rgba(180, 83, 9, 0.08), transparent 45%), linear-gradient(165deg, #f8fafc 0%, #eef2f6 50%, #f1f5f9 100%);
+  --surface: #ffffff;
+  --surface2: #f1f5f9;
+  --surface3: #e2e8f0;
+  --text: #0f172a;
+  --text-secondary: #334155;
+  --muted: #475569;
+  --primary: #b45309;
+  --primary-contrast: #ffffff;
+  --primary-glow: rgba(180, 83, 9, 0.22);
+  --neon1: #15803d;
+  --neon1-glow: rgba(21, 128, 61, 0.22);
+  --neon2: #0284c7;
+  --neon2-glow: rgba(2, 132, 199, 0.22);
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+  --card: #ffffff;
+  --card-hover: #fcfdfe;
+  --card-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.06), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+  --nav-bg: rgba(255, 255, 255, 0.92);
+  --overlay-bg: rgba(15, 23, 42, 0.65);
+  --input-bg: #ffffff;
+}
+
+/* ==========================================================================
+   RESET & CORE PERFORMANCE BASE
+   ========================================================================== */
+*, *::before, *::after{box-sizing:border-box; margin:0; padding:0;}
+html{
+  scroll-behavior:smooth;
+  -webkit-text-size-adjust:100%;
+}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  line-height:1.7;
+  overflow-x:hidden;
+  transition:background .25s ease, color .25s ease;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+a{color:inherit; text-decoration:none;}
+img{max-width:100%; height:auto; display:block;}
+button{font-family:inherit; cursor:pointer;}
+.hidden{display:none !important;}
+section{
+  scroll-margin-top:80px;
+  padding:clamp(50px, 8vw, 90px) clamp(16px, 5vw, 48px);
+  position:relative;
+}
+.container{max-width:1200px; margin:0 auto; width:100%;}
+
+/* ==========================================================================
+   LAG-FREE BACKGROUND & AMBIENT CANVAS (HARDWARE ACCELERATED)
+   ========================================================================== */
+#bg-stage{
+  position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none;
+}
+#bg-mesh{
+  position:absolute; inset:0;
+  background:var(--bg-gradient);
+  transition:background .5s ease;
+  will-change:background;
+}
+#bg-overlay{
+  position:absolute; inset:0;
+  background:radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.4) 100%);
+  pointer-events:none;
+}
+[data-theme="light"] #bg-overlay{
+  background:radial-gradient(ellipse at center, transparent 40%, rgba(240,244,248,0.5) 100%);
+}
+#particles{
+  position:fixed; inset:0; z-index:1; opacity:.22; pointer-events:none;
+  will-change:transform;
+}
+[data-theme="light"] #particles{opacity:.12;}
+
+/* ==========================================================================
+   ULTRA-FAST & SNAPPY SCROLL REVEAL (INSTANT RESPONSE, NO LAG)
+   ========================================================================== */
+.reveal{
+  opacity:0;
+  transform:translate3d(0, 16px, 0);
+  transition:opacity 0.26s cubic-bezier(0.16, 1, 0.3, 1), transform 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change:opacity, transform;
+}
+.reveal-visible{
+  opacity:1;
+  transform:translate3d(0, 0, 0);
+}
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1 !important; transform:none !important; transition:none !important;}
+}
+
+/* ==========================================================================
+   NAVBAR (DEVICE MATCHED & TOUCH-OPTIMIZED)
+   ========================================================================== */
+#navbar{
+  position:fixed; top:0; left:0; right:0; z-index:600;
+  background:var(--nav-bg); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px clamp(10px, 3vw, 32px);
+  gap:10px;
+  transition:background .25s ease, border-color .25s ease;
+  overflow:visible;
+}
+.brand{
+  font-weight:800; font-size:clamp(0.92rem, 1.8vw, 1.15rem); letter-spacing:.02em;
+  display:inline-flex; align-items:center; gap:8px; cursor:pointer;
+  user-select:none; flex-shrink:0;
+}
+.brand-avatar{
+  width:32px; height:32px; border-radius:50%; object-fit:cover;
+  border:2px solid var(--primary); box-shadow:0 0 10px var(--primary-glow);
+  flex-shrink:0; transition:transform .2s ease;
+}
+.brand:hover .brand-avatar{transform:scale(1.08);}
+.brand-text{white-space:nowrap;}
+.brand .cursor{
+  display:inline-block; width:8px; height:1.1em;
+  background:var(--primary); margin-left:2px;
+  animation:blink 1s step-end infinite; vertical-align:middle;
+}
+#nav-links{
+  display:flex; gap:clamp(6px, 1.1vw, 15px); align-items:center;
+  flex-wrap:nowrap;
+}
+#nav-links a{
+  font-size:clamp(0.76rem, 0.9vw, 0.83rem); font-weight:600; color:var(--text-secondary);
+  padding:5px 4px; border-bottom:2px solid transparent;
+  white-space:nowrap; transition:color .18s ease, border-color .18s ease;
+}
+#nav-links a.active, #nav-links a:hover{
+  color:var(--primary); border-color:var(--primary);
+}
+.nav-right{
+  display:flex; align-items:center; gap:clamp(5px, 0.8vw, 8px);
+  flex-shrink:0;
+}
+.voice-quick-btn{
+  background:var(--surface2); border:1px solid var(--border); color:var(--text);
+  padding:5px 11px; border-radius:20px; font-size:.76rem; font-weight:700;
+  display:inline-flex; align-items:center; gap:5px; transition:.2s;
+  white-space:nowrap; flex-shrink:0;
+}
+.voice-quick-btn:hover{border-color:var(--neon2); color:var(--neon2);}
+.admin-quick-btn{
+  background:rgba(245,158,11,0.14); border:1.5px solid var(--primary);
+  color:var(--primary); padding:5px 11px; border-radius:20px;
+  font-size:.76rem; font-weight:800; display:inline-flex; align-items:center;
+  gap:5px; transition:all .2s ease; cursor:pointer;
+  white-space:nowrap; flex-shrink:0;
+}
+.admin-quick-btn:hover{
+  background:var(--primary); color:var(--primary-contrast);
+  box-shadow:0 0 12px var(--primary-glow); transform:scale(1.04);
+}
+.pwa-install-btn{
+  background:linear-gradient(135deg, rgba(132,204,22,0.18), rgba(6,182,212,0.18));
+  border:1.5px solid var(--neon1); color:var(--text);
+  padding:5px 11px; border-radius:20px; font-size:.76rem; font-weight:800;
+  display:inline-flex; align-items:center; gap:5px; transition:all .2s ease; cursor:pointer;
+  box-shadow:0 0 10px var(--neon1-glow); white-space:nowrap; flex-shrink:0;
+}
+.pwa-install-btn:hover{
+  background:var(--neon1); color:#000; transform:scale(1.04);
+}
+.toggle-pill{
+  width:54px; height:27px; border-radius:20px; border:1px solid var(--border);
+  background:var(--surface2); position:relative; display:flex; align-items:center;
+  padding:2px; transition:.25s; flex-shrink:0;
+}
+.toggle-dot{
+  width:21px; height:21px; border-radius:50%; background:var(--primary);
+  transition:transform .25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow:0 0 8px var(--primary-glow);
+}
+[data-theme="light"] .toggle-dot{transform:translateX(0);}
+[data-theme="dark"] .toggle-dot{transform:translateX(27px);}
+#theme-label{
+  position:absolute; width:100%; text-align:center;
+  font-size:.50rem; font-weight:800; letter-spacing:.06em;
+  pointer-events:none; left:0; color:var(--text);
+}
+#hamburger{
+  display:none; flex-direction:column; justify-content:center; gap:4px;
+  background:none; border:none; padding:6px; width:34px; height:34px;
+  flex-shrink:0;
+}
+#hamburger span{
+  width:20px; height:2px; background:var(--text); border-radius:2px;
+  transition:transform .2s, opacity .2s;
+}
+#nav-progress{
+  position:fixed; top:0; left:0; height:3px;
+  background:linear-gradient(90deg, var(--neon1), var(--neon2), var(--primary));
+  box-shadow:0 0 10px var(--neon1-glow); z-index:700; width:0%;
+  transition:width .08s linear;
+}
+
+@media(max-width:1250px){
+  #nav-links{
+    position:fixed; top:52px; left:0; right:0;
+    background:var(--surface); flex-direction:column;
+    padding:16px 22px; display:none; border-bottom:1px solid var(--border);
+    box-shadow:var(--card-shadow); gap:8px; max-height:80vh; overflow-y:auto;
+  }
+  #nav-links.open{display:flex;}
+  #nav-links a{padding:8px 4px; width:100%; font-size:.92rem;}
+  #hamburger{display:flex;}
+}
+
+@media(max-width:680px){
+  #navbar{padding:8px 10px; gap:6px;}
+  .nav-btn-text{display:none;}
+  .pwa-install-btn, .admin-quick-btn, .voice-quick-btn{
+    padding:5px 8px; font-size:.82rem; border-radius:50%; width:32px; height:32px;
+    justify-content:center;
+  }
+  .toggle-pill{width:46px; height:24px;}
+  .toggle-dot{width:18px; height:18px;}
+  [data-theme="dark"] .toggle-dot{transform:translateX(22px);}
+  #theme-label{display:none;}
+}
+
+@media(max-width:400px){
+  .brand-text{font-size:.85rem;}
+  .pwa-install-btn{display:none !important;}
+}
+
+/* ==========================================================================
+   BUTTONS, BADGES, SIGNBOARDS & CARDS (DEVICE MATCHED)
+   ========================================================================== */
+.btn-row{display:flex; gap:10px; margin-top:20px; flex-wrap:wrap; align-items:center;}
+.btn-primary{
+  background:var(--primary); color:var(--primary-contrast);
+  border:none; padding:11px 22px; border-radius:10px;
+  font-weight:700; font-size:.88rem; display:inline-flex; align-items:center;
+  gap:8px; box-shadow:0 4px 14px var(--primary-glow); transition:transform .18s, box-shadow .18s, filter .18s;
+}
+.btn-primary:hover{transform:translateY(-2px); filter:brightness(1.08);}
+.btn-primary:active{transform:translateY(0);}
+.btn-ghost{
+  background:transparent; border:1px solid var(--border-strong);
+  color:var(--text); padding:10px 20px; border-radius:10px;
+  font-weight:700; font-size:.88rem; display:inline-flex; align-items:center;
+  gap:8px; transition:background .18s, border-color .18s, transform .18s;
+}
+.btn-ghost:hover{
+  background:var(--surface2); border-color:var(--primary);
+  color:var(--primary); transform:translateY(-2px);
+}
+.btn-voice-hero{
+  background:linear-gradient(135deg, rgba(6,182,212,0.14), rgba(245,158,11,0.14));
+  border:1.5px solid var(--neon2); color:var(--text); padding:10px 18px;
+  border-radius:24px; font-weight:700; font-size:.84rem; display:inline-flex;
+  align-items:center; gap:8px; transition:.2s; box-shadow:0 0 14px var(--neon2-glow);
+}
+.btn-voice-hero:hover{
+  transform:scale(1.03); background:rgba(6,182,212,0.22);
+}
+
+.pill{
+  display:inline-block; border:1px solid var(--neon2); color:var(--neon2);
+  padding:5px 14px; border-radius:30px; font-size:.72rem; font-weight:800;
+  letter-spacing:.08em; box-shadow:0 0 10px var(--neon2-glow); margin-bottom:14px;
+}
+.section-head{margin-bottom:28px;}
+.signboard{
+  display:inline-block; position:relative; overflow:hidden;
+  border:1px solid var(--neon1); border-radius:12px;
+  padding:10px 22px; background:linear-gradient(90deg, rgba(132,204,22,0.08), rgba(6,182,212,0.08));
+  box-shadow:0 0 18px var(--neon1-glow);
+}
+.signboard h2{font-size:clamp(1.4rem, 3.5vw, 1.85rem); font-weight:800; letter-spacing:.02em; position:relative; z-index:2;}
+.signboard::after{
+  content:''; position:absolute; top:0; left:-60%; width:40%; height:100%;
+  background:linear-gradient(120deg, transparent, rgba(255,255,255,0.25), transparent);
+  animation:sweep 4s ease-in-out infinite;
+}
+
+.ghost-wrap{position:relative;}
+.ghost-text{
+  position:absolute; top:-34px; left:0; font-size:clamp(4rem, 10vw, 7.5rem); font-weight:900;
+  color:var(--text); opacity:.035; letter-spacing:.05em; white-space:nowrap;
+  z-index:0; pointer-events:none; user-select:none;
+}
+
+.card{
+  background:var(--card); border:1px solid var(--border); border-radius:14px;
+  padding:clamp(16px, 3vw, 24px); box-shadow:var(--card-shadow);
+  transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+  position:relative; z-index:1;
+}
+.card:hover{
+  transform:translateY(-3px); border-color:var(--border-strong);
+  box-shadow:0 14px 34px -8px rgba(0,0,0,0.18);
+}
+.grid-2{display:grid; grid-template-columns:repeat(2, 1fr); gap:20px;}
+.grid-3{display:grid; grid-template-columns:repeat(3, 1fr); gap:20px;}
+.grid-4{display:grid; grid-template-columns:repeat(4, 1fr); gap:16px;}
+@media(max-width:900px){
+  .grid-2, .grid-3{grid-template-columns:1fr;}
+  .grid-4{grid-template-columns:repeat(2, 1fr);}
+}
+@media(max-width:540px){
+  .grid-4{grid-template-columns:1fr;}
+}
+
+.tag-row{display:flex; flex-wrap:wrap; gap:6px; margin:10px 0;}
+.tag-chip{
+  background:rgba(132,204,22,0.1); color:var(--neon1); border:1px solid var(--neon1);
+  padding:3px 10px; border-radius:20px; font-size:.7rem; font-weight:700;
+}
+.iot-badge{
+  background:rgba(6,182,212,0.1); color:var(--neon2); border:1px solid var(--neon2);
+  padding:3px 10px; border-radius:20px; font-size:.7rem; font-weight:700;
+}
+
+/* ==========================================================================
+   HERO SECTION (DEVICE MATCHED & VOICE INTEGRATED)
+   ========================================================================== */
+#home{min-height:92vh; display:flex; align-items:center; padding-top:clamp(90px, 12vh, 120px);}
+.hero-grid{
+  display:grid; grid-template-columns:1.25fr 0.75fr; gap:clamp(24px, 5vw, 48px);
+  align-items:center; width:100%;
+}
+@media(max-width:860px){
+  .hero-grid{grid-template-columns:1fr; text-align:left;}
+  .hero-photo-wrap{order:-1; margin-bottom:10px;}
+}
+.hero-name{
+  font-size:clamp(2rem, 5.2vw, 3.4rem); font-weight:900; line-height:1.15;
+  margin-bottom:8px; letter-spacing:-.02em;
+}
+.hero-role{
+  font-size:clamp(1rem, 2vw, 1.15rem); color:var(--muted); font-weight:600;
+  margin-bottom:14px;
+}
+.terminal-line{
+  font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size:.95rem; color:var(--neon1); min-height:1.4em; margin-bottom:12px;
+}
+.terminal-line .caret{display:inline-block; width:8px; background:var(--neon1); animation:blink 1s step-end infinite;}
+.neon-text{color:var(--neon1); text-shadow:0 0 8px var(--neon1-glow);}
+
+.skill-pill-row{display:flex; flex-wrap:wrap; gap:8px; margin:14px 0;}
+.skill-pill{
+  background:var(--surface2); border:1px solid var(--border);
+  padding:5px 12px; border-radius:20px; font-size:.74rem; font-weight:600;
+}
+
+.stat-row{display:grid; grid-template-columns:repeat(4, 1fr); gap:12px; margin-top:24px;}
+@media(max-width:640px){.stat-row{grid-template-columns:repeat(2, 1fr);}}
+.stat-card{
+  background:var(--card); border:1px solid var(--border); border-radius:12px;
+  padding:12px 14px; text-align:center; box-shadow:var(--card-shadow);
+}
+.stat-card b{display:block; font-size:1.5rem; color:var(--primary); font-weight:900; line-height:1.2;}
+.stat-card span{font-size:.68rem; color:var(--muted); letter-spacing:.05em; font-weight:700;}
+
+.hero-photo-wrap{display:flex; justify-content:center; align-items:center;}
+.hero-photo-frame{
+  position:relative; width:clamp(220px, 32vw, 290px); aspect-ratio:1;
+  border-radius:24px; padding:6px;
+  background:linear-gradient(135deg, var(--primary), var(--neon2), var(--neon1));
+  box-shadow:0 15px 40px -10px var(--primary-glow);
+}
+.hero-photo{
+  width:100%; height:100%; object-fit:cover; border-radius:18px;
+  background:var(--surface); display:block;
+}
+.hero-avatar{
+  width:100%; height:100%; border-radius:18px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  background:radial-gradient(circle at 30% 20%, rgba(6,182,212,.2), var(--surface) 65%);
+  color:var(--primary); font-weight:900;
+}
+.hero-avatar b{font-size:3.8rem; line-height:1;}
+.hero-avatar span{font-size:.72rem; color:var(--muted); margin-top:6px;}
+
+/* ==========================================================================
+   ABOUT ME SECTION (DETAILED PARAGRAPHIC STORYTELLING)
+   ========================================================================== */
+.about-narrative{
+  display:flex; flex-direction:column; gap:20px;
+}
+.narrative-card{
+  background:var(--card); border:1px solid var(--border); border-radius:14px;
+  padding:clamp(18px, 3vw, 28px); position:relative;
+}
+.narrative-card h3{
+  font-size:1.15rem; font-weight:800; color:var(--primary);
+  display:flex; align-items:center; gap:8px; margin-bottom:10px;
+}
+.narrative-card p{
+  color:var(--text-secondary); font-size:1.02rem; line-height:1.85;
+  margin-bottom:12px;
+}
+.narrative-card p:last-child{margin-bottom:0;}
+.about-highlights-grid{
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));
+  gap:16px; margin-top:20px;
+}
+.highlight-item{
+  background:var(--surface2); border:1px solid var(--border); border-radius:12px;
+  padding:14px 18px;
+}
+.highlight-item b{display:block; color:var(--text); font-size:.9rem; margin-bottom:4px;}
+.highlight-item span{color:var(--muted); font-size:.82rem; line-height:1.5; display:block;}
+
+/* ==========================================================================
+   PROJECTS, DOCS, CONTACT & OTHER SECTIONS
+   ========================================================================== */
+.project-cover{
+  width:100%; height:160px; object-fit:cover; border-radius:10px;
+  margin-bottom:12px; border:1px solid var(--border);
+}
+.project-card h3{font-size:1.1rem; font-weight:800; margin-bottom:6px;}
+.project-card p{color:var(--muted); font-size:.88rem; line-height:1.65;}
+.project-card .btn-row{margin-top:14px;}
+.project-card .btn-ghost{padding:6px 14px; font-size:.78rem;}
+
+.doc-card{
+  display:flex; align-items:center; gap:14px; background:var(--card);
+  border:1px solid var(--border); border-radius:14px; padding:14px 18px;
+  margin-bottom:12px; transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+  cursor:pointer; position:relative;
+}
+.doc-card:hover{
+  transform:translateY(-2px); border-color:var(--primary);
+  box-shadow:0 8px 24px rgba(245,158,11,0.12);
+}
+.doc-icon{
+  width:44px; height:44px; border-radius:12px; background:rgba(245,158,11,0.14);
+  color:var(--primary); display:flex; align-items:center; justify-content:center;
+  flex:0 0 44px; font-size:1.25rem;
+}
+.doc-info{flex:1; min-width:0;}
+.doc-info b{display:flex; align-items:center; gap:8px; font-size:.95rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.doc-info span{font-size:.8rem; color:var(--muted); display:block; margin-top:2px;}
+.doc-type-badge{
+  font-size:.65rem; font-weight:800; padding:2px 8px; border-radius:6px;
+  background:rgba(245,158,11,0.18); color:var(--primary); letter-spacing:.04em;
+  text-transform:uppercase; display:inline-block;
+}
+.doc-actions{display:flex; align-items:center; gap:8px; flex-shrink:0;}
+.btn-doc-view{
+  padding:8px 16px; font-size:.82rem; font-weight:700; border-radius:8px;
+  display:inline-flex; align-items:center; gap:6px; background:var(--primary);
+  color:#000; border:none; cursor:pointer; transition:transform .15s, filter .15s;
+}
+.btn-doc-view:hover{transform:translateY(-1px); filter:brightness(1.1);}
+.btn-doc-download{
+  padding:8px 12px; font-size:.82rem; font-weight:700; border-radius:8px;
+  display:inline-flex; align-items:center; gap:4px; background:var(--surface2);
+  color:var(--text); border:1px solid var(--border); cursor:pointer; transition:all .15s;
+}
+.btn-doc-download:hover{border-color:var(--primary); color:var(--primary); transform:translateY(-1px);}
+
+/* Doc Preview Modal */
+.doc-modal-box{
+  background:var(--surface); border:1.5px solid var(--border-strong);
+  border-radius:18px; max-width:960px; width:100%; height:90vh; max-height:860px;
+  display:flex; flex-direction:column; box-shadow:0 30px 80px rgba(0,0,0,0.6);
+  overflow:hidden; position:relative;
+}
+.doc-modal-header{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 20px; border-bottom:1px solid var(--border);
+  background:var(--surface2); gap:12px; flex-wrap:wrap;
+}
+.doc-modal-title{display:flex; align-items:center; gap:10px; min-width:0; flex:1;}
+.doc-modal-title h3{font-size:1.05rem; font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.doc-modal-btns{display:flex; align-items:center; gap:8px;}
+.doc-modal-body{
+  flex:1; position:relative; background:#0b0d13; overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+}
+.doc-modal-body iframe, .doc-modal-body embed, .doc-modal-body object{
+  width:100%; height:100%; border:none; background:#fff;
+}
+.doc-modal-img{max-width:100%; max-height:100%; object-fit:contain; border-radius:6px;}
+.doc-modal-fallback{
+  text-align:center; padding:32px 20px; max-width:480px; margin:0 auto; color:var(--text);
+}
+.doc-modal-fallback h4{font-size:1.2rem; margin-bottom:8px;}
+.doc-modal-fallback p{color:var(--muted); font-size:.9rem; margin-bottom:18px;}
+
+.contact-dialog{
+  display:flex; flex-wrap:wrap; gap:16px; background:var(--surface);
+  border:1.5px solid var(--neon2); box-shadow:0 0 16px var(--neon2-glow);
+  border-radius:14px; padding:20px; margin-bottom:24px;
+}
+.contact-chip{flex:1 1 200px; display:flex; align-items:center; gap:12px;}
+.chip-ic{
+  width:40px; height:40px; flex:0 0 40px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(132,204,22,0.12); color:var(--neon1);
+}
+.chip-text{display:flex; flex-direction:column;}
+.chip-text b{font-size:.68rem; letter-spacing:.08em; opacity:.7; text-transform:uppercase;}
+.chip-text span{font-size:.88rem; font-weight:700; word-break:break-word;}
+
+.social-row{display:flex; flex-wrap:wrap; gap:6px; margin:16px 0; align-items:center;}
+.social-ic{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:42px; height:42px; border-radius:50%; color:#fff;
+  box-shadow:0 4px 12px rgba(0,0,0,0.2); transition:transform .2s ease;
+}
+.social-ic:hover{transform:scale(1.12) translateY(-2px);}
+
+.form-field{margin-bottom:14px; display:flex; flex-direction:column; gap:5px;}
+.form-field label{font-size:.78rem; font-weight:700; color:var(--muted);}
+.form-field input, .form-field textarea, .form-field select{
+  background:var(--input-bg); border:1px solid var(--border); color:var(--text);
+  padding:10px 12px; border-radius:8px; font-family:inherit; font-size:.88rem;
+  transition:border-color .18s;
+}
+.form-field input:focus, .form-field textarea:focus, .form-field select:focus{
+  outline:none; border-color:var(--primary);
+}
+
+/* ==========================================================================
+   AI ASSISTANT VOICE WELCOME & WIDGET (STRICT DUAL THEME)
+   ========================================================================== */
+#ai-welcome-overlay{
+  position:fixed; inset:0; background:var(--overlay-bg); backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px); z-index:9990; display:flex;
+  align-items:center; justify-content:center; padding:18px;
+  animation:aiFadeIn .25s ease-out;
+}
+@keyframes aiFadeIn{from{opacity:0;}to{opacity:1;}}
+.ai-welcome-card{
+  background:var(--surface); border:1.5px solid var(--primary);
+  border-radius:24px; box-shadow:0 25px 60px rgba(0,0,0,0.4), 0 0 30px var(--neon2-glow);
+  max-width:740px; width:100%; position:relative; overflow:hidden;
+  animation:aiCardPop .3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes aiCardPop{from{opacity:0; transform:scale(0.94) translateY(14px);}to{opacity:1; transform:scale(1) translateY(0);}}
+.ai-close-btn{
+  position:absolute; top:16px; right:16px; background:var(--surface2); border:1px solid var(--border);
+  color:var(--text); width:34px; height:34px; border-radius:50%; font-size:1.1rem;
+  display:flex; align-items:center; justify-content:center; cursor:pointer; transition:.2s; z-index:10;
+}
+.ai-close-btn:hover{background:rgba(239,68,68,0.2); border-color:#ef4444; color:#ef4444; transform:rotate(90deg);}
+
+.ai-welcome-layout{display:flex; align-items:center; padding:32px 28px; gap:28px;}
+.ai-avatar-col{flex:0 0 190px; display:flex; flex-direction:column; align-items:center; justify-content:center;}
+.ai-avatar-wrapper{position:relative; width:170px; text-align:center;}
+.ai-avatar-img{
+  width:100%; height:auto; display:block; filter:drop-shadow(0 8px 20px var(--neon2-glow));
+  animation:androidFloat 3.2s ease-in-out infinite;
+}
+@keyframes androidFloat{0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);}}
+.ai-status-badge{
+  margin-top:10px; display:inline-flex; align-items:center; gap:6px;
+  background:var(--surface2); border:1px solid var(--neon2); color:var(--neon2);
+  font-size:.68rem; font-weight:800; letter-spacing:.08em; padding:3px 12px; border-radius:20px;
+}
+.ai-status-dot{width:8px; height:8px; border-radius:50%; background:var(--neon1); box-shadow:0 0 8px var(--neon1-glow); animation:blink 1.2s infinite;}
+
+.ai-dialog-col{flex:1; min-width:0;}
+.ai-dialog-head{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px; flex-wrap:wrap;}
+.ai-badge{
+  font-size:.65rem; font-weight:800; letter-spacing:.1em; color:var(--primary);
+  background:rgba(245,158,11,0.12); border:1px solid var(--primary); padding:3px 8px; border-radius:6px;
+}
+.ai-sound-indicator{
+  display:inline-flex; align-items:center; gap:3px; font-size:.72rem; color:var(--muted);
+  background:var(--surface2); padding:3px 10px; border-radius:20px; border:1px solid var(--border);
+}
+.ai-sound-indicator .bar{
+  display:inline-block; width:3px; height:8px; background:var(--neon2); border-radius:2px;
+}
+.ai-sound-indicator.speaking .bar{animation:soundWave .35s ease-in-out infinite alternate;}
+.ai-sound-indicator.speaking .b1{animation-delay:.08s;}
+.ai-sound-indicator.speaking .b2{animation-delay:.16s;}
+.ai-sound-indicator.speaking .b3{animation-delay:.24s;}
+.ai-sound-indicator.speaking .b4{animation-delay:.12s;}
+@keyframes soundWave{0%{height:4px;} 100%{height:15px;}}
+
+.ai-title{font-size:clamp(1.25rem, 3vw, 1.55rem); font-weight:900; margin-bottom:6px; line-height:1.2;}
+.ai-highlight{
+  background:linear-gradient(90deg, var(--primary), var(--neon2));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+.ai-subtitle{font-size:.88rem; color:var(--muted); line-height:1.55; margin-bottom:18px;}
+
+.ai-quick-chips{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:20px;}
+.ai-chip{
+  background:var(--surface2); border:1px solid var(--border); color:var(--text);
+  padding:6px 12px; border-radius:18px; font-size:.75rem; font-weight:600;
+  cursor:pointer; transition:.18s; display:inline-flex; align-items:center; gap:5px;
+}
+.ai-chip:hover{
+  background:rgba(6,182,212,0.14); border-color:var(--neon2); color:var(--neon2);
+  transform:translateY(-1px);
+}
+.ai-dialog-actions{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+
+@media(max-width:680px){
+  .ai-welcome-layout{flex-direction:column; padding:22px 18px; text-align:center;}
+  .ai-avatar-col{flex:none;}
+  .ai-avatar-wrapper{width:130px;}
+  .ai-dialog-head, .ai-quick-chips, .ai-dialog-actions{justify-content:center;}
+}
+
+/* ==========================================================================
+   FLOATING DOCK & CHAT PANEL (DEVICE MATCHED)
+   ========================================================================== */
+#robot-widget{
+  position:fixed; bottom:18px; left:18px; z-index:950;
+  cursor:pointer; display:flex; align-items:flex-end; gap:8px;
+  transition:transform .2s ease;
+}
+#robot-widget:hover{transform:scale(1.06) translateY(-2px);}
+.robot-avatar-pod{position:relative; width:64px;}
+.widget-android-img{
+  width:100%; height:auto; display:block; filter:drop-shadow(0 6px 14px var(--neon2-glow));
+  animation:androidFloat 3.2s ease-in-out infinite;
+}
+.robot-widget-badge{
+  background:var(--surface); border:1.5px solid var(--primary);
+  color:var(--text); padding:6px 12px; border-radius:16px; font-size:.74rem; font-weight:800;
+  letter-spacing:.03em; white-space:nowrap; box-shadow:var(--card-shadow), 0 0 12px var(--primary-glow);
+  display:inline-flex; align-items:center; gap:6px; margin-bottom:10px;
+}
+.pulse-dot{width:7px; height:7px; border-radius:50%; background:var(--neon1); box-shadow:0 0 6px var(--neon1-glow); animation:blink 1s infinite;}
+
+#floating-actions{
+  position:fixed; bottom:18px; right:18px; z-index:900;
+  display:flex; flex-direction:column; gap:8px; align-items:flex-end;
+}
+#feedback-btn, #hirebtn{
+  background:var(--primary); color:var(--primary-contrast);
+  border:none; padding:9px 16px; border-radius:24px; font-weight:800;
+  font-size:.8rem; box-shadow:0 6px 18px var(--primary-glow);
+  transition:transform .2s;
+}
+#hirebtn{background:var(--neon2); color:#000; box-shadow:0 6px 18px var(--neon2-glow);}
+#feedback-btn:hover, #hirebtn:hover{transform:scale(1.05);}
+
+#chat-panel{
+  position:fixed; bottom:88px; left:18px; width:360px; max-width:calc(100vw - 36px);
+  max-height:560px; height:500px; background:var(--surface);
+  border:1.5px solid var(--border-strong); border-radius:20px; z-index:960;
+  display:flex; flex-direction:column; box-shadow:0 20px 50px rgba(0,0,0,0.4), 0 0 25px var(--neon2-glow);
+  animation:chatOpen .24s cubic-bezier(0.16, 1, 0.3, 1); overflow:hidden;
+}
+@keyframes chatOpen{from{opacity:0; transform:translateY(12px) scale(0.96);}to{opacity:1; transform:translateY(0) scale(1);}}
+#chat-head{
+  padding:12px 14px; border-bottom:1px solid var(--border); background:var(--surface2);
+  display:flex; justify-content:space-between; align-items:center;
+}
+.chat-head-left{display:flex; align-items:center; gap:8px;}
+.chat-head-avatar{width:32px; height:32px; object-fit:contain; filter:drop-shadow(0 2px 6px var(--neon2-glow));}
+#chat-title{font-weight:800; font-size:.9rem; display:flex; align-items:center; gap:6px;}
+.chat-online-dot{display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--neon1); box-shadow:0 0 6px var(--neon1-glow);}
+.chat-sub{font-size:.68rem; color:var(--muted); font-weight:600;}
+.chat-head-right{display:flex; align-items:center; gap:6px;}
+#voice-toggle-btn{
+  background:var(--surface); border:1px solid var(--border); color:var(--text);
+  padding:3px 7px; border-radius:6px; font-size:.85rem; cursor:pointer;
+}
+#voice-toggle-btn.active{border-color:var(--neon2); color:var(--neon2);}
+#personal-mode-row{
+  padding:6px 12px; font-size:.72rem; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; gap:6px; background:var(--surface);
+}
+#chat-quick-suggestions{
+  display:flex; gap:5px; overflow-x:auto; padding:6px 10px; background:var(--surface2);
+  border-bottom:1px solid var(--border); scrollbar-width:none;
+}
+#chat-quick-suggestions::-webkit-scrollbar{display:none;}
+.sugg-chip{
+  flex:0 0 auto; background:var(--surface); border:1px solid var(--border);
+  padding:3px 8px; border-radius:10px; font-size:.7rem; font-weight:600;
+  cursor:pointer; color:var(--text); transition:.18s;
+}
+.sugg-chip:hover{border-color:var(--primary); color:var(--primary);}
+#chat-body{
+  flex:1; overflow-y:auto; padding:12px; font-size:.84rem;
+  display:flex; flex-direction:column; gap:8px;
+}
+.chat-msg{
+  padding:9px 12px; border-radius:12px; max-width:85%; line-height:1.5;
+  word-break:break-word;
+}
+.chat-msg.user{
+  align-self:flex-end; background:var(--primary); color:var(--primary-contrast);
+  font-weight:600;
+}
+.chat-msg.bot{
+  align-self:flex-start; background:var(--surface2); border:1px solid var(--border);
+}
+#chat-foot{padding:10px; border-top:1px solid var(--border); display:flex; gap:6px; background:var(--surface);}
+#chat-foot input{
+  flex:1; background:var(--surface2); border:1px solid var(--border); color:var(--text);
+  padding:8px 10px; border-radius:8px; font-size:.84rem;
+}
+
+@media(max-width:540px){
+  #chat-panel{
+    inset:auto 10px 10px 10px; width:auto; max-width:none;
+    height:75vh; max-height:560px;
+  }
+}
+
+/* ==========================================================================
+   SMART ADMIN PANEL (COMPREHENSIVE CMS & INSTANT MODIFICATION)
+   ========================================================================== */
+#admin-panel{
+  position:fixed; inset:0; background:var(--bg); z-index:4000; overflow:hidden;
+  display:flex; flex-direction:column;
+}
+.admin-header{
+  background:var(--surface); border-bottom:1px solid var(--border);
+  padding:12px 20px; display:flex; align-items:center; justify-content:space-between;
+  gap:12px; flex-wrap:wrap; z-index:10;
+}
+.admin-brand-title{font-weight:900; font-size:1.15rem; display:flex; align-items:center; gap:8px;}
+.admin-brand-badge{
+  font-size:.65rem; background:rgba(245,158,11,0.15); color:var(--primary);
+  border:1px solid var(--primary); padding:2px 8px; border-radius:12px;
+}
+.admin-header-tools{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+.admin-search-input{
+  background:var(--surface2); border:1px solid var(--border); color:var(--text);
+  padding:6px 12px; border-radius:8px; font-size:.82rem; width:190px;
+}
+.admin-layout{display:flex; flex:1; min-height:0; overflow:hidden;}
+.admin-side{
+  width:230px; background:var(--surface); border-right:1px solid var(--border);
+  display:flex; flex-direction:column; overflow-y:auto; flex-shrink:0;
+}
+.admin-nav-group-title{
+  font-size:.65rem; font-weight:800; letter-spacing:.08em; color:var(--muted);
+  text-transform:uppercase; padding:12px 18px 4px;
+}
+.admin-side button{
+  display:flex; align-items:center; gap:10px; width:100%; text-align:left;
+  background:none; border:none; color:var(--text); padding:10px 18px;
+  font-size:.82rem; font-weight:600; opacity:.8; transition:.15s;
+}
+.admin-side button:hover, .admin-side button.active{
+  opacity:1; background:var(--surface2); color:var(--primary);
+  border-left:3px solid var(--primary);
+}
+.admin-content{
+  flex:1; min-width:0; display:flex; flex-direction:column;
+  overflow-y:auto; background:var(--bg);
+}
+.admin-toolbar{
+  position:sticky; top:0; z-index:5; display:flex; justify-content:space-between;
+  align-items:center; gap:12px; flex-wrap:wrap; padding:12px 24px;
+  background:var(--surface); border-bottom:1px solid var(--border);
+}
+#cloud-status{font-size:.8rem; color:var(--muted); font-weight:600;}
+#cloud-status.ok{color:var(--neon1);}
+#cloud-status.warn{color:var(--primary);}
+#cloud-status.err{color:#ef4444;}
+.admin-toolbar-actions{display:flex; gap:8px;}
+.admin-main{flex:1; padding:24px; max-width:920px; width:100%; margin:0 auto;}
+.admin-card-box{
+  background:var(--surface); border:1px solid var(--border); border-radius:14px;
+  padding:20px; margin-bottom:20px; box-shadow:var(--card-shadow);
+}
+.admin-card-box h3{
+  font-size:1.05rem; font-weight:800; margin-bottom:14px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.admin-item-row{
+  display:flex; justify-content:space-between; align-items:center; gap:12px;
+  background:var(--surface2); border:1px solid var(--border); padding:12px 16px;
+  border-radius:10px; margin-bottom:8px;
+}
+.admin-item-row button{
+  background:var(--surface); border:1px solid var(--border); color:var(--text);
+  padding:5px 10px; border-radius:6px; margin-left:4px; font-size:.75rem;
+}
+.admin-item-row button:hover{border-color:var(--primary); color:var(--primary);}
+
+@media(max-width:850px){
+  .admin-layout{flex-direction:column;}
+  .admin-side{
+    width:100%; flex-direction:row; overflow-x:auto; border-right:none;
+    border-bottom:1px solid var(--border); flex-shrink:0; padding:4px;
+  }
+  .admin-nav-group-title{display:none;}
+  .admin-side button{white-space:nowrap; padding:8px 12px; width:auto; border-left:none; border-bottom:2px solid transparent;}
+  .admin-side button.active{border-bottom-color:var(--primary); border-left:none;}
+}
+
+/* ==========================================================================
+   GAMES, MODALS & TOAST
+   ========================================================================== */
+.game-card{
+  background:var(--card); border:1px solid var(--border); border-radius:14px;
+  padding:16px; text-align:center; cursor:pointer; transition:.2s;
+}
+.game-card:hover{border-color:var(--primary); transform:translateY(-3px);}
+.game-card .gi{
+  width:46px; height:46px; margin:0 auto 8px; background:var(--surface2);
+  border-radius:10px; display:flex; align-items:center; justify-content:center;
+  color:var(--primary); font-weight:900;
+}
+#game-active-area{
+  margin-top:24px; background:var(--card); border:1px solid var(--border);
+  border-radius:16px; padding:20px; min-height:180px; text-align:center;
+}
+.ttt-board{display:grid; grid-template-columns:repeat(3, 68px); gap:6px; margin:14px auto; justify-content:center;}
+.ttt-cell{
+  width:68px; height:68px; background:var(--surface2); border:1px solid var(--border);
+  font-size:1.8rem; font-weight:900; display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+}
+.mem-grid{display:grid; grid-template-columns:repeat(4, 64px); gap:6px; margin:14px auto; justify-content:center;}
+.mem-card{
+  width:64px; height:64px; background:var(--surface2); border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center; font-size:1.2rem;
+  font-weight:900; color:var(--primary); cursor:pointer;
+}
+.mole-grid{display:grid; grid-template-columns:repeat(3, 76px); gap:8px; margin:14px auto; justify-content:center;}
+.mole-hole{width:76px; height:76px; background:var(--surface2); border-radius:50%; border:1px solid var(--border); cursor:pointer;}
+.mole-hole.up{background:var(--neon1);}
+.g2048-grid{display:grid; grid-template-columns:repeat(4, 64px); grid-template-rows:repeat(4, 64px); gap:6px; margin:14px auto; justify-content:center;}
+.g2048-cell{background:var(--surface2); border-radius:8px; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:1rem;}
+
+.modal{
+  position:fixed; inset:0; background:var(--overlay-bg); backdrop-filter:blur(10px);
+  z-index:2500; display:flex; align-items:center; justify-content:center; padding:18px;
+}
+.modal-box{
+  background:var(--surface); border:1px solid var(--border-strong);
+  border-radius:18px; padding:24px; max-width:440px; width:100%;
+  box-shadow:0 20px 45px rgba(0,0,0,0.3);
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+.shake {
+  animation: shake 0.4s ease-in-out;
+  border-color: #ef4444 !important;
+}
+
+#toast{
+  position:fixed; bottom:20px; left:50%; transform:translateX(-50%) translateY(20px);
+  background:var(--surface); border:1px solid var(--border-strong); color:var(--text);
+  padding:10px 18px; border-radius:10px; z-index:5000; opacity:0; pointer-events:none;
+  transition:opacity .2s, transform .2s; font-size:.82rem; font-weight:700; max-width:90vw;
+  box-shadow:var(--card-shadow);
+}
+#toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+#toast.ok{border-color:var(--neon1); color:var(--neon1);}
+#toast.err{border-color:#ef4444; color:#ef4444;}
+#toast.warn{border-color:var(--primary); color:var(--primary);}
+
+footer{
+  padding:36px clamp(16px, 5vw, 40px); text-align:center;
+  border-top:1px solid var(--border); color:var(--muted); font-size:.84rem;
+  background:var(--surface);
+}
+footer a{color:var(--primary); font-weight:700;}
+
+@keyframes blink{50%{opacity:0;}}
+@keyframes sweep{0%{left:-60%;} 100%{left:120%;}}
+</style>
+</head>
+<body>
+
+<!-- LAG-FREE AMBIENT STAGE -->
+<div id="bg-stage" aria-hidden="true">
+  <div id="bg-mesh"></div>
+  <div id="bg-overlay"></div>
+</div>
+<canvas id="particles" aria-hidden="true"></canvas>
+<div id="nav-progress"></div>
+<div id="toast"></div>
+
+<!-- STICKY DEVICE-MATCHED NAVBAR -->
+<nav id="navbar">
+  <div class="brand" onclick="window.scrollTo({top:0, behavior:'smooth'})" ondblclick="openAdmin()" title="MD Emam Masum (Double-click for Admin)">
+    <img id="nav-brand-img" src="favicon.png" alt="MD Emam Masum" class="brand-avatar">
+    <span class="brand-text">MD EMAM MASUM</span><span class="cursor"></span>
+  </div>
+  <div id="nav-links"></div>
+  <div class="nav-right">
+    <button class="pwa-install-btn" onclick="installPWA()" title="Install App on Android / iOS / PC">
+      <span>📲</span><span class="nav-btn-text"> Install</span>
+    </button>
+    <button class="admin-quick-btn" onclick="openAdmin()" title="Open Admin CMS Portal">
+      <span>🔐</span><span class="nav-btn-text"> Admin</span>
+    </button>
+    <button class="voice-quick-btn" onclick="playWelcomeVoice(true)" title="Listen to AI Voice Greeting">
+      <span>🔊</span><span class="nav-btn-text"> Voice</span>
+    </button>
+    <button class="toggle-pill" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+      <span class="toggle-dot"></span>
+      <span id="theme-label">DARK</span>
+    </button>
+    <button id="hamburger" onclick="toggleMobileNav()" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MAIN APP CONTENT -->
+<main id="app"></main>
+
+<!-- SITE FOOTER -->
+<footer id="site-footer"></footer>
+
+<!-- AI ANDROID WELCOME GREETING OVERLAY (ON BEHALF OF MASUM) -->
+<div id="ai-welcome-overlay" class="hidden">
+  <div class="ai-welcome-card">
+    <button class="ai-close-btn" onclick="dismissAIWelcome()" title="Dismiss to floating button">✕</button>
+    <div class="ai-welcome-layout">
+      <div class="ai-avatar-col">
+        <div class="ai-avatar-wrapper">
+          <img src="robot_avatar.png" alt="EMAM-AI Android" class="ai-avatar-img">
+          <div class="ai-status-badge"><span class="ai-status-dot"></span> EMAM-AI ONLINE</div>
+        </div>
+      </div>
+      <div class="ai-dialog-col">
+        <div class="ai-dialog-head">
+          <span class="ai-badge">PORTFOLIO AI COMPANION</span>
+          <div class="ai-sound-indicator" id="ai-sound-indicator">
+            <span class="bar b1"></span><span class="bar b2"></span><span class="bar b3"></span><span class="bar b4"></span>
+            <span id="ai-voice-label">Voice Welcome</span>
+          </div>
+        </div>
+        <h3 class="ai-title">Welcome from <span class="ai-highlight">MD Emam Masum</span></h3>
+        <p class="ai-subtitle" id="ai-welcome-sub">I am EMAM-AI, his personal assistant. On his behalf, I warmly welcome you to explore his AgroSense IoT project, full-stack builds, and achievements!</p>
+        
+        <div class="ai-quick-chips">
+          <button class="ai-chip" onclick="askQuickPrompt('Tell me about AgroSense IoT project and sensors used')">🌾 AgroSense IoT Project</button>
+          <button class="ai-chip" onclick="askQuickPrompt('Why should I hire MD Emam Masum?')">💼 Why Hire Masum?</button>
+          <button class="ai-chip" onclick="askQuickPrompt('What are Masum\'s key skills and tech stack?')">⚡ Skills &amp; Stack</button>
+          <button class="ai-chip" onclick="askQuickPrompt('How can I contact or hire Masum?')">📞 Contact &amp; Hire</button>
+        </div>
+
+        <div class="ai-dialog-actions">
+          <button class="btn-primary" onclick="startAIChatWithVoice()">
+            <span>💬</span> Chat &amp; Speak
+          </button>
+          <button class="btn-ghost" onclick="playWelcomeVoice(true)">
+            <span>🔊</span> Listen Voice Welcome
+          </button>
+          <button class="btn-ghost" style="border:none;" onclick="dismissAIWelcome()">Explore Site</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FLOATING ROBOT WIDGET -->
+<div id="robot-widget" onclick="toggleChat()" title="Click to chat or hear AI voice">
+  <div class="robot-widget-badge">
+    <span class="pulse-dot"></span> 💬 ASK AI
+  </div>
+  <div class="robot-avatar-pod">
+    <img src="robot_avatar.png" alt="EMAM-AI" class="widget-android-img">
+  </div>
+</div>
+
+<!-- FLOATING FAST ACTIONS -->
+<div id="floating-actions">
+  <button id="hirebtn" onclick="openHire()">Hire Me</button>
+  <button id="feedback-btn" onclick="openFeedback()">Feedback</button>
+</div>
+
+<!-- INTERACTIVE AI CHAT PANEL -->
+<div id="chat-panel" class="hidden">
+  <div id="chat-head">
+    <div class="chat-head-left">
+      <img src="robot_avatar.png" class="chat-head-avatar" alt="EMAM-AI">
+      <div>
+        <div id="chat-title">EMAM-AI <span class="chat-online-dot"></span></div>
+        <div class="chat-sub">Speaking on behalf of Masum</div>
+      </div>
+    </div>
+    <div class="chat-head-right">
+      <button id="voice-toggle-btn" onclick="toggleVoiceOutput()" title="Toggle Voice Output" class="active">🔊</button>
+      <button onclick="toggleChat()" style="background:none;border:none;color:var(--text);font-size:1.1rem;cursor:pointer;">✕</button>
+    </div>
+  </div>
+  <div id="personal-mode-row">
+    <input type="checkbox" id="personal-mode-toggle">
+    <label for="personal-mode-toggle">Personal Mentor Mode</label>
+  </div>
+  <div id="chat-quick-suggestions">
+    <span class="sugg-chip" onclick="sendSuggested('Tell me about AgroSense IoT')">🌾 AgroSense</span>
+    <span class="sugg-chip" onclick="sendSuggested('Why hire Masum?')">💼 Hire</span>
+    <span class="sugg-chip" onclick="sendSuggested('Skills list')">⚡ Skills</span>
+    <span class="sugg-chip" onclick="sendSuggested('Contact info')">📞 Contact</span>
+  </div>
+  <div id="chat-body"></div>
+  <div id="chat-foot">
+    <input id="chat-input" placeholder="Ask EMAM-AI anything..." onkeydown="if(event.key==='Enter')sendChat();">
+    <button class="btn-primary" style="padding:8px 14px;" onclick="sendChat()">Go</button>
+  </div>
+</div>
+
+<!-- FEEDBACK MODAL -->
+<div id="feedback-modal" class="modal hidden">
+  <div class="modal-box">
+    <h3 style="margin-bottom:12px;">Share Feedback</h3>
+    <div class="form-field"><label>Your Name</label><input id="fb-name"></div>
+    <div class="form-field"><label>Email (optional)</label><input id="fb-email"></div>
+    <div class="form-field"><label>Rating (1-5)</label><input id="fb-rating" type="number" min="1" max="5" value="5"></div>
+    <div class="form-field"><label>Message</label><textarea id="fb-msg" rows="3"></textarea></div>
+    <div class="btn-row">
+      <button class="btn-primary" onclick="submitFeedback()">Submit</button>
+      <button class="btn-ghost" onclick="closeFeedback()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- HIRE ME MODAL -->
+<div id="hire-modal" class="modal hidden">
+  <div class="modal-box">
+    <h3 style="margin-bottom:12px;">Let's Build Something Great</h3>
+    <p style="margin-bottom:16px; color:var(--muted); font-size:.9rem;">Reach out directly to MD Emam Masum for IoT projects, embedded engineering, or web development roles:</p>
+    <div class="btn-row">
+      <a class="btn-primary" href="https://wa.me/8801774109683" target="_blank">WhatsApp Direct</a>
+      <a class="btn-ghost" href="mailto:emammasum727178@gmail.com?subject=Job%20Opportunity">Send Email</a>
+    </div>
+</div>
+
+<!-- DOCUMENT / CV INSTANT PREVIEW MODAL -->
+<div id="doc-preview-modal" class="modal hidden" onclick="if(event.target===this) closeDocModal()">
+  <div class="doc-modal-box">
+    <div class="doc-modal-header">
+      <div class="doc-modal-title">
+        <span id="doc-modal-icon" style="font-size:1.4rem;">📄</span>
+        <div style="min-width:0;">
+          <h3 id="doc-modal-heading" style="margin:0; font-size:1.05rem; color:var(--text); font-weight:800;">Document Viewer</h3>
+          <span id="doc-modal-sub" style="font-size:.78rem; color:var(--muted); display:block;">MD Emam Masum Verified Credentials</span>
+        </div>
+      </div>
+      <div class="doc-modal-btns">
+        <button id="doc-modal-tab-btn" class="btn-ghost" style="padding:6px 12px; font-size:.8rem; display:inline-flex; align-items:center; gap:5px;" onclick="openCurrentDocInNewTab()" title="Open in dedicated tab">
+          <span>🌐</span> New Tab
+        </button>
+        <button id="doc-modal-down-btn" class="btn-primary" style="padding:6px 14px; font-size:.8rem; display:inline-flex; align-items:center; gap:5px;" onclick="downloadCurrentDoc()" title="Direct download">
+          <span>⬇️</span> Download
+        </button>
+        <button class="btn-ghost" style="padding:6px 12px; font-size:1rem; border-radius:8px;" onclick="closeDocModal()" aria-label="Close">✕</button>
+      </div>
+    </div>
+    <div id="doc-modal-body" class="doc-modal-body">
+      <!-- Embedded Document content injected here -->
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN AUTHENTICATION & LOGIN MODAL -->
+<div id="admin-login-modal" class="modal hidden" onclick="if(event.target===this) closeAdminLoginModal()">
+  <div class="modal-box" style="max-width:460px; position:relative;">
+    <button class="btn-ghost" style="position:absolute; top:16px; right:16px; padding:4px 10px; border-radius:50%; font-size:1.1rem; line-height:1;" onclick="closeAdminLoginModal()" aria-label="Close">✕</button>
+    
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
+      <div style="width:44px; height:44px; border-radius:12px; background:linear-gradient(135deg, rgba(245,158,11,0.22), rgba(6,182,212,0.22)); display:flex; align-items:center; justify-content:center; font-size:1.4rem; border:1px solid var(--border-strong);">
+        🔐
+      </div>
+      <div>
+        <h3 style="margin:0; font-size:1.15rem; color:var(--text); font-weight:800;">Admin Authentication</h3>
+        <span style="font-size:.78rem; color:var(--muted);">Authorized access for MD Emam Masum</span>
+      </div>
+    </div>
+
+    <form onsubmit="handleAdminLoginSubmit(event)" style="margin-top:14px;">
+      <div class="form-field" style="margin-bottom:12px;">
+        <label style="display:flex; justify-content:space-between; align-items:center; font-size:.82rem; margin-bottom:6px;">
+          <span>Admin Password</span>
+          <button type="button" onclick="toggleAdminPassVisibility()" style="background:none; border:none; color:var(--primary); cursor:pointer; font-size:.78rem; font-weight:700; padding:0;" id="admin-pass-toggle-btn">👁️ Show</button>
+        </label>
+        <div style="position:relative;">
+          <input id="admin-login-input" type="password" placeholder="Enter admin password" autocomplete="current-password" style="width:100%;" autofocus>
+        </div>
+        <div id="admin-login-err" style="color:#ef4444; font-size:.8rem; margin-top:6px; min-height:18px; display:none; font-weight:600;"></div>
+      </div>
+
+      <div class="btn-row" style="margin-top:14px;">
+        <button type="submit" class="btn-primary" style="flex:1; justify-content:center; padding:10px 18px; font-weight:700; width:100%;">
+          <span>Unlock Admin Panel</span> &rarr;
+        </button>
+      </div>
+    </form>
+
+    <div style="margin-top:16px; padding-top:12px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
+      <button type="button" class="btn-ghost" style="padding:6px 10px; font-size:.78rem; color:var(--primary); font-weight:700;" onclick="toggleForgotPasswordBox()">
+        🔑 Forgot Password / Firebase Sync?
+      </button>
+      <span style="font-size:.72rem; color:var(--muted);">Cloud Connected</span>
+    </div>
+
+    <!-- FORGOT PASSWORD / FIREBASE SYNC ACCORDION -->
+    <div id="forgot-password-box" style="display:none; margin-top:14px; padding:14px; background:var(--surface2); border:1px solid var(--border); border-radius:12px; font-size:.82rem;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+        <b style="color:var(--text); font-size:.85rem;">☁️ Firebase Password Management</b>
+        <button type="button" class="btn-ghost" style="padding:2px 8px; font-size:.75rem;" onclick="toggleForgotPasswordBox()">Hide</button>
+      </div>
+      <p style="color:var(--text-secondary); line-height:1.45; margin-bottom:10px;">
+        Your password is saved and synced to <b>Firebase Firestore</b> in project <code style="color:var(--primary); font-size:.75rem;">portfoliomasum-m</code>. You can change it anytime in the Firebase Console or fetch the latest password below!
+      </p>
+      
+      <div style="background:var(--surface3); padding:10px 12px; border-radius:8px; margin-bottom:12px; border:1px solid var(--border);">
+        <div style="font-size:.74rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:4px; font-weight:700;">How to change in Firebase Console:</div>
+        <ol style="margin:0; padding-left:18px; color:var(--text-secondary); line-height:1.55; font-size:.78rem;">
+          <li>Go to <a href="https://console.firebase.google.com/project/portfoliomasum-m/firestore" target="_blank" style="color:var(--primary); text-decoration:underline;">Firebase Firestore Console</a></li>
+          <li>Select collection <b><code>site</code></b> &rarr; document <b><code>security</code></b> (or <code>content</code>)</li>
+          <li>Edit field <b><code>adminPass</code></b> with your new password and click <b>Update</b></li>
+          <li>Return here and click <b>Check &amp; Sync from Firebase</b>!</li>
+        </ol>
+      </div>
+
+      <div class="btn-row" style="gap:8px;">
+        <button type="button" class="btn-primary" style="flex:1; padding:9px 14px; font-size:.8rem; justify-content:center;" onclick="syncPasswordFromFirebaseUI()">
+          🔄 Check &amp; Sync from Firebase
+        </button>
+      </div>
+      <div id="forgot-pass-status" style="margin-top:8px; font-size:.78rem; color:var(--muted);"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- SMART FULL-FEATURED ADMIN PANEL -->
+<div id="admin-panel" class="hidden"></div>
+
+<!-- FIREBASE SDKS -->
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
+
+<script>
+/* ==========================================================================
+   ICONS & CONSTANTS
+   ========================================================================== */
+var ICONS = {
+  facebook:'<svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M22 12.06C22 6.49 17.52 2 12 2S2 6.49 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.84c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.45 2.91h-2.33V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>',
+  github:'<svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-.87-.01-1.71-2.78.62-3.37-1.37-3.37-1.37-.46-1.19-1.11-1.51-1.11-1.51-.91-.64.07-.63.07-.63 1 .07 1.53 1.05 1.53 1.05.89 1.57 2.34 1.11 2.91.85.09-.67.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05a9.3 9.3 0 0 1 2.5-.35c.85 0 1.71.12 2.5.35 1.9-1.33 2.74-1.05 2.74-1.05.56 1.41.21 2.45.1 2.71.65.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.8-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.6.69.49A10.02 10.02 0 0 0 22 12.25C22 6.58 17.52 2 12 2Z"/></svg>',
+  mail:'<svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm1.4 2 7.1 5.6a1 1 0 0 0 1 0L19.6 7H4.4ZM4 8.4V18h16V8.4l-7.4 5.8a2 2 0 0 1-2.2 0L4 8.4Z"/></svg>',
+  twitter:'<svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M4 4l7.1 9.3L4.3 20H6.6l5.6-6.1L16.8 20H20l-7.5-9.8L19 4h-2.3l-5.1 5.6L8.2 4H4Z"/></svg>',
+  youtube:'<svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M21.8 7.2a2.7 2.7 0 0 0-1.9-1.9C18.2 5 12 5 12 5s-6.2 0-7.9.3c-.9.2-1.6.9-1.9 1.9C2 8.9 2 12 2 12s0 3.1.3 4.8c.2.9.9 1.6 1.9 1.9C5.8 19 12 19 12 19s6.2 0 7.9-.3c.9-.2 1.6-.9 1.9-1.9.2-1.7.2-4.8.2-4.8s0-3.1-.2-4.8ZM10 15.3V8.7L15.8 12 10 15.3Z"/></svg>',
+  skype:'<svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12.3 6.3c2.5 0 3.7 1.3 3.7 2.6 0 .8-.5 1.3-1.1 1.3-.9 0-1-.6-1.1-1-.1-.6-.5-1.3-1.7-1.3-1 0-1.6.5-1.6 1.1 0 .7.9 1 2 1.3 1.8.5 4 1.1 4 3.6 0 2-1.8 3.4-4.5 3.4-2.8 0-4.4-1.4-4.4-2.8 0-.7.5-1.2 1.2-1.2.9 0 1 .6 1.2 1.1.2.6.6 1.3 2.1 1.3 1.3 0 1.9-.6 1.9-1.3 0-.8-1-1.1-2.3-1.5-1.7-.5-3.6-1.1-3.6-3.4 0-1.9 1.6-3.2 4.2-3.2ZM12 2a10 10 0 1 0 9.9 11.3A4.5 4.5 0 0 0 16.2 7a4.5 4.5 0 0 0-5.8-5 10 10 0 0 0 1.6 0Z"/></svg>',
+  linkedin:'<svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M6.9 8.4H3.6V20h3.3V8.4ZM5.3 3.5a1.9 1.9 0 1 0 0 3.8 1.9 1.9 0 0 0 0-3.8ZM20.4 20h-3.3v-5.9c0-1.4-.5-2.3-1.7-2.3-1 0-1.5.7-1.8 1.3-.1.2-.1.6-.1.9V20H10V8.4h3.3v1.5c.4-.7 1.2-1.7 3-1.7 2.2 0 3.9 1.4 3.9 4.5V20Z"/></svg>',
+  phone:'<svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M6.6 2.7c.5-.1 1 .1 1.3.5l2 2.7c.4.5.4 1.2 0 1.7L8.3 9.5c.9 1.9 2.4 3.4 4.3 4.3l1.9-1.6c.5-.4 1.2-.4 1.7 0l2.7 2c.4.3.6.8.5 1.3l-.5 2.3c-.1.6-.6 1-1.2 1-9 0-16.3-7.3-16.3-16.3 0-.6.4-1.1 1-1.2l2.3-.5Z"/></svg>',
+  pin:'<svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.3 7 13 7 13s7-7.7 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg>'
+};
+
+var STORAGE_KEY = 'masum_os_data_v7';
+var CHAT_KEY = 'masum_chat_history_v2';
+var ADMIN_PASS_KEY = 'masum_admin_pass';
+var DEFAULT_ADMIN_PASS = '7271780203ms';
+var FIREBASE_WRITE_KEY = 'MASUM_CLOUD_SAVE_v1';
+var FB_CONFIG = {
+  apiKey: 'AIzaSyBsLxt12CBidpma3fr2SviDsb0xUrKgtbU',
+  authDomain: 'portfoliomasum-m.firebaseapp.com',
+  projectId: 'portfoliomasum-m',
+  storageBucket: 'portfoliomasum-m.firebasestorage.app',
+  messagingSenderId: '409318846687',
+  appId: '1:409318846687:web:1fd0b79402f4c7e621396a',
+  measurementId: 'G-FQ091TRBBH'
+};
+var fbDb = null;
+var fbStorage = null;
+var lastCloudData = null;
+var cloudSaveInProgress = false;
+var lastSaveTimestamp = 0;
+
+/* ==========================================================================
+   DEFAULT COMPREHENSIVE DATA (PARAGRAPHIC ABOUT & ADVANCED AI VOICE)
+   ========================================================================== */
+var DEFAULT_DATA = {
+  theme: {
+    mode: 'dark',
+    primaryColor: '#f59e0b',
+    neon1: '#84cc16',
+    neon2: '#06b6d4',
+    animSpeed: 'fast'
+  },
+  hero: {
+    name: 'MD EMAM MASUM',
+    role: 'IoT & Embedded Systems Engineer | Web Developer | CSE Student',
+    status: 'Final Year B.Sc. CSE Student at BAUST, Saidpur',
+    greetingPill: 'OPEN TO OPPORTUNITIES',
+    photo: 'favicon.png',
+    email: 'emammasum727178@gmail.com',
+    cta1Text: 'View Projects',
+    cta1Link: '#projects',
+    cta2Text: 'Connect With Me',
+    cta2Link: '#contact',
+    stat1Val: '9+', stat1Label: 'PROJECTS',
+    stat2Val: '3+', stat2Label: 'IOT BUILDS',
+    stat3Val: 'Final', stat3Label: 'YEAR CSE',
+    stat4Val: '2026', stat4Label: 'GRADUATION',
+    typingMessages: [
+      'Architecting IoT smart systems with ESP32 & Cloud...',
+      'Building AgroSense: AI-assisted crop monitoring...',
+      'Crafting clean, responsive, full-stack web experiences...',
+      'Bridging embedded hardware with modern software...'
+    ]
+  },
+  about: {
+    heading: 'About Me',
+    leadTitle: 'Bridging Hardware, Cloud Intelligence, and Software Engineering',
+    p1: "I am MD Emam Masum, a dedicated and forward-thinking final-year Computer Science & Engineering student at Bangladesh Army University of Science and Technology (BAUST), Saidpur. Driven by an intense curiosity for the intersection of hardware and software, I bridge the gap between embedded systems, the Internet of Things (IoT), and modern cloud-connected web applications. My foundation is built on disciplined academic rigor, beginning with perfect GPA 5.00 achievements across primary, secondary, and higher secondary milestones.",
+    p2: "My engineering journey is defined by hands-on experimentation, building physical prototypes that interact with the real world. As the lead researcher and developer of AgroSense—an AI-powered, multi-sensor crop monitoring system powered by ESP32 microcontrollers and Firebase—I have engineered telemetry architectures that provide farmers with actionable climate, soil, and crop health insights. This work has deepened my expertise in sensor fusion, non-blocking firmware design, power optimization, and real-time cloud data pipelining.",
+    p3: "Beyond embedded firmware, I thrive in full-stack web engineering, crafting responsive, high-performance dashboards, user interfaces, and cloud databases. From structuring firmware loops to designing interactive web experiences, I prioritize clean code, responsive design, non-blocking asynchronous workflows, and rock-solid reliability. I treat every project not just as working code, but as a complete, resilient product engineered for real humans.",
+    p4: "I believe technology's highest purpose is solving grounded, human problems. Whether automating industrial processes, architecting smart agriculture nodes, or building developer tools, I bring relentless discipline, rapid adaptability, and a proactive problem-solving mindset. I am actively seeking impactful roles as a Junior IoT & Embedded Systems Engineer, Web Developer, or Software Engineer where I can contribute and continuously grow.",
+    highlights: [
+      { title: 'Embedded & IoT Systems', desc: 'ESP32, Arduino, sensor calibration, real-time telemetry, firmware optimization' },
+      { title: 'Full-Stack Web Dev', desc: 'Modern responsive JavaScript, HTML5/CSS3, Firebase Firestore/Storage, REST APIs' },
+      { title: 'AgroSense Lead Researcher', desc: 'Flagship undergraduate thesis automating smart agriculture with AI assistance' },
+      { title: 'Discipline & Problem Solving', desc: 'Solid academic record (Golden GPA 5.00 HSC/SSC), rapid learner, team builder' }
+    ]
+  },
+  personalDetails: {
+    father: 'MD Shamsul Islam', mother: 'Mst Selina Akter', maritalStatus: 'Unmarried',
+    nationality: 'Bangladeshi', dob: 'March 2, 2002', religion: 'Islam', gender: 'Male', location: 'Dhaka, Bangladesh',
+    address: 'Monipur, Kazipara Metro Station, Mirpur-10, Dhaka-1216',
+    languages: 'Bengali (Native), English (Fluent / Professional)'
+  },
+  education: [
+    { degree: 'B.Sc. in Computer Science & Engineering', institution: 'Bangladesh Army University of Science and Technology (BAUST), Saidpur, Nilphamari', duration: '2022 - 2026 (Expected, Final Year)', result: 'CGPA 2.69 (Second Class, 69%)', details: 'Thesis: An IoT-Based Smart Farming and Crop Monitoring System using ESP32, Firebase and multiple sensors (2025-2026). Coursework includes embedded systems, databases, computer networks and software engineering.' },
+    { degree: 'Higher Secondary Certificate (HSC)', institution: 'Cantonment Public School and College Bir Uttom Shaheed Mahbub Senanibas, Dhaka', duration: '2018 - 2020', result: 'GPA 5.00 (Golden A+)', details: 'Science group. Completed higher secondary with perfect GPA, building a strong base in mathematics, physics and ICT.' },
+    { degree: 'Secondary School Certificate (SSC)', institution: 'Shibpur High School, Birampur, Dinajpur', duration: '2016 - 2018', result: 'GPA 5.00 (Golden A+)', details: 'Science group. Secured GPA 5.00 with consistent academic performance in core STEM subjects.' },
+    { degree: 'Primary School Certificate (PSC)', institution: 'Fulpur Kutubdanga Government Primary School, Chirirbandar, Dinajpur', duration: '2012', result: 'GPA 5.00', details: 'Completed primary education with GPA 5.00, marking the start of a disciplined academic journey.' }
+  ],
+  experience: [
+    { role: 'Undergraduate Thesis Researcher — AgroSense', org: 'BAUST, Department of CSE', duration: '2025 - 2026', description: 'Designing and implementing an IoT-based smart farming and crop monitoring system with ESP32, multi-sensor nodes, Firebase cloud sync and a web dashboard for realtime farm insights.' },
+    { role: 'Independent Web & IoT Developer', org: 'Personal / Client-style builds', duration: '2023 - Present', description: 'Building portfolio-grade web apps, Firebase-backed dashboards and ESP32/Arduino prototypes — from UI to hardware integration — with a focus on practical, demo-ready systems.' },
+    { role: 'Computer Basics & MS Office Training', org: 'Army Computer Training School Logistic, Dhaka Cantonment', duration: 'Jan 1 - Mar 31, 2018 (3 months)', description: 'Completed a structured training program covering computer fundamentals, file management and the MS Office package (Word, Excel, PowerPoint).' }
+  ],
+  projects: [
+    { title: 'AgroSense - AI-Based Crop Management System', category: 'IoT / AI', techStack: 'ESP32, Firebase, DHT/Soil/Light sensors, HTML/CSS/JS Web App', description: 'Flagship thesis project: an IoT-based smart farming and crop monitoring system using ESP32 nodes, Firebase, and multiple sensors so farmers can track soil, climate and crop status with AI-assisted insights.', repoLink: 'https://github.com/masum5672', demoLink: 'https://portfoliomasum-m.web.app/', videoUrl: 'https://www.youtube.com/@MDEmamMasum', imageUrl: 'https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&w=900&q=70' },
+    { title: 'IoT and AI-Based Home Automation System', category: 'IoT / AI', techStack: 'ESP32, Arduino, Relays, Sensors, Firebase', description: 'A smart home prototype to monitor rooms and switch appliances remotely. Sensor readings sync to Firebase so a web panel can show live status and send control commands.', repoLink: 'https://github.com/masum5672', demoLink: 'https://portfoliomasum-m.web.app/#projects', videoUrl: 'https://www.youtube.com/@MDEmamMasum', imageUrl: 'https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&w=900&q=70' },
+    { title: 'DevVerse', category: 'Web Development', techStack: 'HTML, CSS, JavaScript, Firebase', description: 'A developer-universe style web experience for showcasing projects, tools and learning notes in one OS-like interface — designed as a personal product playground besides this portfolio.', repoLink: 'https://github.com/masum5672', demoLink: 'https://portfoliomasum-m.web.app/', videoUrl: 'https://www.youtube.com/@MDEmamMasum', imageUrl: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=900&q=70' },
+    { title: 'Scientific Smart Calculator', category: 'Software', techStack: 'C / C++', description: 'A desktop-style scientific calculator covering trigonometry, logs, powers and memory operations beyond basic arithmetic — built to practice structured programming and UI logic.', repoLink: 'https://github.com/masum5672', demoLink: 'https://portfoliomasum-m.web.app/#projects', videoUrl: 'https://www.youtube.com/@MDEmamMasum', imageUrl: 'https://images.unsplash.com/photo-1587145820266-a5951ee6f620?auto=format&fit=crop&w=900&q=70' },
+    { title: 'Self Portfolio Website', category: 'Web Development', techStack: 'HTML, CSS, JavaScript, Firebase Hosting, Firestore, Storage', description: 'This Portfolio OS site: education, skills, IoT projects, games and admin CMS, hosted on Firebase with cloud save for photos and profile data.', repoLink: 'https://github.com/masum5672', demoLink: 'https://portfoliomasum-m.web.app/', videoUrl: 'https://www.youtube.com/@MDEmamMasum', imageUrl: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=70' },
+    { title: 'Library Management System', category: 'Software / Database', techStack: 'C++/Java, RDBMS', description: 'Manages book inventory, members, borrow/return flow and search with a relational database so a small library can replace paper registers.', repoLink: 'https://github.com/masum5672', demoLink: 'https://portfoliomasum-m.web.app/#projects', videoUrl: 'https://www.youtube.com/@MDEmamMasum', imageUrl: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=900&q=70' },
+    { title: 'AI-Based Plagiarism Checker', category: 'AI / Software', techStack: 'Python, NLP, AI Tools', description: 'Compares documents for similarity using text processing and AI helpers, then highlights overlapping passages for academic integrity checks.', repoLink: 'https://github.com/masum5672', demoLink: 'https://portfoliomasum-m.web.app/#projects', videoUrl: 'https://www.youtube.com/@MDEmamMasum', imageUrl: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=900&q=70' },
+    { title: 'Attendance Management System', category: 'Software / Database', techStack: 'Programming + Database', description: 'Digital attendance for classes or labs: add people, mark present/absent, and export summaries instead of keeping a manual register.', repoLink: 'https://github.com/masum5672', demoLink: 'https://portfoliomasum-m.web.app/#projects', videoUrl: 'https://www.youtube.com/@MDEmamMasum', imageUrl: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=900&q=70' },
+    { title: 'Self-Driving Car (Prototype)', category: 'IoT / Robotics', techStack: 'Arduino/ESP32, Ultrasonic sensors, Motor driver', description: 'A small autonomous car prototype that detects obstacles and steers around them, demonstrating basic sensor fusion and embedded control.', repoLink: 'https://github.com/masum5672', demoLink: 'https://portfoliomasum-m.web.app/#projects', videoUrl: 'https://www.youtube.com/@MDEmamMasum', imageUrl: 'https://images.unsplash.com/photo-1553440569-bcc63803a83d?auto=format&fit=crop&w=900&q=70' }
+  ],
+  skills: [
+    { category: 'Programming', items: 'C, C++, Python, JavaScript, Problem Solving' },
+    { category: 'Web Development', items: 'HTML5, CSS3, JavaScript (ES6+), AJAX, Responsive UI, Web Apps' },
+    { category: 'IoT & Embedded Systems', items: 'ESP32, Arduino, Firmware, Sensor Networks, Microcontrollers, Automation' },
+    { category: 'Database & Cloud', items: 'Firebase Firestore, Realtime Database, Cloud Storage, Hosting, RDBMS' },
+    { category: 'Electronics & Hardware', items: 'Circuit Design, Sensor Integration, Relays, Motors, Power Modules' },
+    { category: 'Tools & Workflow', items: 'Git, GitHub, VS Code, AI Integration, Prompt Engineering, MS Office' },
+    { category: 'Professional Strengths', items: 'Troubleshooting, System Architecture, Team Collaboration, Rapid Adaptability' }
+  ],
+  awards: [
+    { title: 'Golden GPA 5.00 — HSC', issuer: 'Board of Intermediate and Secondary Education', year: '2020', description: 'Achieved GPA 5.00 in Higher Secondary Certificate (Science), Cantonment Public School and College, Dhaka.' },
+    { title: 'Golden GPA 5.00 — SSC', issuer: 'Board of Intermediate and Secondary Education', year: '2018', description: 'Achieved GPA 5.00 in Secondary School Certificate (Science), Shibpur High School, Birampur, Dinajpur.' },
+    { title: 'Undergraduate Thesis Selection — AgroSense', issuer: 'BAUST CSE Department', year: '2025-2026', description: 'Selected thesis on IoT-based smart farming with ESP32, Firebase and multi-sensor crop monitoring.' }
+  ],
+  qualificationsVisible: true,
+  qualificationsTitle: 'Check My Qualifications Here',
+  downloads: [
+    { title: 'CV / Resume (PDF)', note: 'Complete curriculum vitae highlighting IoT, embedded and web skills', fileType: 'PDF', fileUrl: 'mailto:emammasum727178@gmail.com?subject=Request%20CV%20/%20Resume', uploadedFile: '' },
+    { title: 'One-Page Short Resume', note: 'Single-page summary for quick screening and recruitment', fileType: 'PDF', fileUrl: 'mailto:emammasum727178@gmail.com?subject=Request%20Short%20Resume', uploadedFile: '' },
+    { title: 'SSC Certificate', note: 'Secondary School Certificate (GPA 5.00) — available on request', fileType: 'PDF/IMG', fileUrl: 'mailto:emammasum727178@gmail.com?subject=Request%20SSC%20Certificate', uploadedFile: '' },
+    { title: 'HSC Certificate', note: 'Higher Secondary Certificate (GPA 5.00) — available on request', fileType: 'PDF/IMG', fileUrl: 'mailto:emammasum727178@gmail.com?subject=Request%20HSC%20Certificate', uploadedFile: '' },
+    { title: 'BAUST Academic Transcript', note: 'Official academic transcript — available on request', fileType: 'PDF', fileUrl: 'mailto:emammasum727178@gmail.com?subject=Request%20BAUST%20Transcript', uploadedFile: '' }
+  ],
+  learning: [
+    { title: 'AI Tools & Prompt Engineering', provider: 'Self-study & Hands-on', status: 'Active', description: 'Practical implementation of LLM APIs, prompt engineering, and intelligent features in web & IoT.' },
+    { title: 'Advanced IoT Systems & Power Design', provider: 'Thesis Research', status: 'Active', description: 'ESP32 deep sleep states, LoRa/Wi-Fi telemetry, sensor calibration, and battery management.' },
+    { title: 'Cloud Data Pipelines & Firestore', provider: 'Applied Builds', status: 'Active', description: 'Cloud functions, real-time data streaming, security rules, and production architecture.' }
+  ],
+  references: [
+    { name: 'Taher Mohammad Mahdee', designation: 'Associate Professor', organization: 'BAUST Rangpur', phone: '+8801717244737', email: 'mahdee@baust.edu.bd', relation: 'Academic Supervisor' },
+    { name: 'Selim Javed', designation: 'Corporal, Bangladesh Army', organization: 'Dhaka Cantonment', phone: '+8801726545624', email: 'selimjaved24159@gmail.com', relation: 'Personal & Family' }
+  ],
+  contact: {
+    email: 'emammasum727178@gmail.com',
+    phone1: '+8801774109683',
+    phone2: '+8801521774707',
+    address: 'Monipur, Kazipara Metro Station, Mirpur-10, Dhaka-1216',
+    location: 'Dhaka, Bangladesh',
+    facebook: 'https://facebook.com/share/19bVccnXJk',
+    github: 'https://github.com/masum5672',
+    linkedin: 'https://linkedin.com/in/md-em-masum-53a5ba2b6',
+    twitter: 'https://x.com/emammasum',
+    youtube: 'https://www.youtube.com/@MDEmamMasum',
+    skype: 'skype:emammasum727178?chat'
+  },
+  ai: {
+    apiKey: 'AQ.Ab8RN6I8wBbZFelzJjq70O8ircFLpn2uzDZp5GZCYQUbHqIOyA',
+    model: 'gemini-3.8-flash',
+    assistantName: 'EMAM-AI',
+    welcomeVoiceText: "Hello and welcome! I am EMAM-AI, the personal AI assistant of MD Emam Masum. On his behalf, I warmly welcome you to explore his portfolio, IoT innovations, and engineering achievements. Feel free to ask me anything or explore his projects!",
+    voiceRate: 1.0,
+    voicePitch: 1.0,
+    autoWelcomeVoice: true,
+    persona: 'You speak as a sharp, friendly Bangladeshi engineer-mentor: concise, practical, respectful, and encouraging. When unsure, say so clearly.',
+    extraKnowledge: 'Owner is MD Emam Masum, final-year CSE at BAUST Saidpur. Flagship project is AgroSense (ESP32 + Firebase + sensors). Seeking Junior IoT/Embedded Systems Engineer, Web Developer, or Software Engineer roles. Located at Mirpur-10, Dhaka.'
+  },
+  security: {
+    adminPass: '7271780203ms',
+    updatedAt: '2026-10-20'
+  },
+  feedback: []
+};
+
+var DATA = loadData();
+
+/* ==========================================================================
+   DATA HELPER FUNCTIONS & DEEP CLONING
+   ========================================================================== */
+function cloneData(obj){ return JSON.parse(JSON.stringify(obj)); }
+function fillEmptyFromDefaults(target, source){
+  if(target == null) return cloneData(source);
+  if(Array.isArray(target) && Array.isArray(source)){
+    if(!target.length && source.length) return cloneData(source);
+    for(var i=0; i<target.length; i++){
+      if(source[i] && target[i] && typeof target[i] === 'object') fillEmptyFromDefaults(target[i], source[i]);
+    }
+    return target;
+  }
+  if(typeof target === 'object' && typeof source === 'object'){
+    for(var k in source){
+      if(target[k] == null || target[k] === '') target[k] = source[k];
+      else if(typeof target[k] === 'object') fillEmptyFromDefaults(target[k], source[k]);
+    }
+  }
+  return target;
+}
+function mergeDefaults(parsed){
+  var merged = cloneData(DEFAULT_DATA);
+  if(!parsed) return merged;
+  for(var k in parsed){ merged[k] = parsed[k]; }
+  fillEmptyFromDefaults(merged, DEFAULT_DATA);
+  if(merged.ai && (!merged.ai.model || merged.ai.model.indexOf('1.5') >= 0 || merged.ai.model.indexOf('2.0') >= 0)){
+    merged.ai.model = 'gemini-3.8-flash';
+  }
+  return merged;
+}
+function loadData(){
+  try{
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return cloneData(DEFAULT_DATA);
+    return mergeDefaults(JSON.parse(raw));
+  }catch(e){ return cloneData(DEFAULT_DATA); }
+}
+function saveData(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA));
+  updateCloudStatus();
+}
+function getAdminPassword(){
+  if(DATA && DATA.security && DATA.security.adminPass){
+    return String(DATA.security.adminPass).trim();
+  }
+  var loc = localStorage.getItem(ADMIN_PASS_KEY);
+  if(loc) return String(loc).trim();
+  return DEFAULT_ADMIN_PASS;
+}
+function setAdminPassword(newPass){
+  var p = String(newPass || '').trim();
+  if(!p) return;
+  if(!DATA.security) DATA.security = {};
+  DATA.security.adminPass = p;
+  DATA.security.updatedAt = new Date().toISOString();
+  localStorage.setItem(ADMIN_PASS_KEY, p);
+  saveData();
+  // Persist directly to Firebase Firestore
+  saveToFirebase({ quiet: true }).catch(function(e){ console.warn('Cloud pass sync warning:', e); });
+  if(initFirebase() && fbDb){
+    fbDb.collection('site').doc('security').set({
+      adminPass: p,
+      writeKey: FIREBASE_WRITE_KEY,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    }).catch(function(e){ console.warn('Security doc sync warning:', e); });
+  }
+}
+function fetchAdminPasswordFromFirebase(){
+  if(!initFirebase()){
+    return Promise.reject(new Error('Firebase SDK not ready. Check internet connection.'));
+  }
+  return fbDb.collection('site').doc('security').get().then(function(secSnap){
+    if(secSnap.exists && secSnap.data() && secSnap.data().adminPass){
+      var p = String(secSnap.data().adminPass).trim();
+      if(p){
+        if(!DATA.security) DATA.security = {};
+        DATA.security.adminPass = p;
+        localStorage.setItem(ADMIN_PASS_KEY, p);
+        saveData();
+        return p;
+      }
+    }
+    return fbDb.collection('site').doc('content').get().then(function(snap){
+      if(snap.exists && snap.data() && snap.data().payload && snap.data().payload.security && snap.data().payload.security.adminPass){
+        var p2 = String(snap.data().payload.security.adminPass).trim();
+        if(p2){
+          if(!DATA.security) DATA.security = {};
+          DATA.security.adminPass = p2;
+          localStorage.setItem(ADMIN_PASS_KEY, p2);
+          saveData();
+          return p2;
+        }
+      }
+      return getAdminPassword();
+    });
+  });
+}
+
+function showToast(msg, kind){
+  var el = document.getElementById('toast');
+  if(!el) return;
+  el.textContent = msg;
+  el.className = 'show ' + (kind || '');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(function(){ el.className = ''; }, 3600);
+}
+function escapeHtml(s){
+  return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function isIoTProject(p){
+  var s = ((p.title||'') + ' ' + (p.techStack||'') + ' ' + (p.category||'')).toLowerCase();
+  return /iot|esp32|sensor|arduino|embedded|firmware/.test(s);
+}
+
+/* ==========================================================================
+   AI VOICE ASSISTANT ENGINE (SPEAKING ON BEHALF OF MASUM)
+   ========================================================================== */
+var voiceEnabled = true;
+var isSpeaking = false;
+var voiceWelcomedThisSession = false;
+
+function setVoiceIndicator(active){
+  var ind = document.getElementById('ai-sound-indicator');
+  if(ind) ind.classList.toggle('speaking', active);
+}
+
+function stopAISpeech(){
+  if('speechSynthesis' in window) window.speechSynthesis.cancel();
+  setVoiceIndicator(false);
+  isSpeaking = false;
+}
+
+function speakAI(text, onEndCb){
+  if(!voiceEnabled || !('speechSynthesis' in window)){
+    if(onEndCb) onEndCb();
+    return;
+  }
+  try{
+    window.speechSynthesis.cancel();
+    var cleanText = text.replace(/[*_#`>-]/g, ' ').replace(/https?:\/\/\S+/g, 'link').replace(/\s+/g, ' ').trim();
+    if(cleanText.length > 360){
+      cleanText = cleanText.substring(0, 350) + '... and more details are available in the portfolio sections.';
+    }
+    var utter = new SpeechSynthesisUtterance(cleanText);
+    utter.rate = parseFloat((DATA.ai && DATA.ai.voiceRate) || 1.0);
+    utter.pitch = parseFloat((DATA.ai && DATA.ai.voicePitch) || 1.0);
+    
+    var voices = window.speechSynthesis.getVoices();
+    var best = voices.find(function(v){
+      return v.lang && v.lang.indexOf('en') === 0 && (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Samantha') || v.name.includes('David'));
+    }) || voices.find(function(v){ return v.lang && v.lang.indexOf('en') === 0; });
+    
+    if(best) utter.voice = best;
+
+    setVoiceIndicator(true);
+    isSpeaking = true;
+
+    utter.onend = function(){
+      setVoiceIndicator(false);
+      isSpeaking = false;
+      if(onEndCb) onEndCb();
+    };
+    utter.onerror = function(){
+      setVoiceIndicator(false);
+      isSpeaking = false;
+      if(onEndCb) onEndCb();
+    };
+
+    window.speechSynthesis.speak(utter);
+  }catch(e){
+    setVoiceIndicator(false);
+    isSpeaking = false;
+    if(onEndCb) onEndCb();
+  }
+}
+
+function playWelcomeVoice(force){
+  if(!force && voiceWelcomedThisSession) return;
+  voiceWelcomedThisSession = true;
+  var welcomeText = (DATA.ai && DATA.ai.welcomeVoiceText) ||
+    "Hello and welcome! I am EMAM-AI, the personal AI assistant of MD Emam Masum. On his behalf, I warmly welcome you to explore his portfolio, IoT innovations, and engineering achievements. Feel free to ask me anything or click around!";
+  speakAI(welcomeText);
+  showToast('🎙️ AI Speaking on behalf of MD Emam Masum...', 'ok');
+}
+
+function toggleVoiceOutput(){
+  voiceEnabled = !voiceEnabled;
+  var btn = document.getElementById('voice-toggle-btn');
+  if(btn){
+    btn.textContent = voiceEnabled ? '🔊' : '🔇';
+    btn.className = voiceEnabled ? 'active' : '';
+  }
+  if(!voiceEnabled) stopAISpeech();
+  showToast(voiceEnabled ? 'Voice output enabled 🔊' : 'Voice output muted 🔇', 'ok');
+}
+
+function showAIWelcome(){
+  var overlay = document.getElementById('ai-welcome-overlay');
+  if(overlay) overlay.classList.remove('hidden');
+}
+
+function dismissAIWelcome(){
+  var overlay = document.getElementById('ai-welcome-overlay');
+  if(overlay) overlay.classList.add('hidden');
+  stopAISpeech();
+}
+
+function startAIChatWithVoice(){
+  dismissAIWelcome();
+  var panel = document.getElementById('chat-panel');
+  if(panel && panel.classList.contains('hidden')) toggleChat();
+  playWelcomeVoice(true);
+}
+
+function askQuickPrompt(promptText){
+  dismissAIWelcome();
+  var panel = document.getElementById('chat-panel');
+  if(panel && panel.classList.contains('hidden')) toggleChat();
+  var input = document.getElementById('chat-input');
+  if(input){
+    input.value = promptText;
+    sendChat();
+  }
+}
+
+function sendSuggested(promptText){
+  var input = document.getElementById('chat-input');
+  if(input){
+    input.value = promptText;
+    sendChat();
+  }
+}
+
+function toggleChat(){
+  var panel = document.getElementById('chat-panel');
+  panel.classList.toggle('hidden');
+  if(!panel.classList.contains('hidden')){
+    renderChatHistory();
+    dismissAIWelcome();
+    var inp = document.getElementById('chat-input');
+    if(inp) setTimeout(function(){ inp.focus(); }, 120);
+  } else {
+    stopAISpeech();
+  }
+}
+
+function loadChatHistory(){
+  try{ return JSON.parse(localStorage.getItem(CHAT_KEY) || '[]'); }catch(e){ return []; }
+}
+function saveChatHistory(h){ localStorage.setItem(CHAT_KEY, JSON.stringify(h)); }
+
+function renderChatHistory(){
+  var body = document.getElementById('chat-body');
+  var hist = loadChatHistory();
+  if(!hist.length){
+    hist = [{role:'bot', text:"👋 Greetings! I am EMAM-AI, MD Emam Masum's personal AI android assistant. How can I assist you today? You can ask me anything about his AgroSense IoT project, tech skills, resume, or contact details!"}];
+  }
+  body.innerHTML = hist.map(function(m){
+    return '<div class="chat-msg '+m.role+'">'+escapeHtml(m.text)+'</div>';
+  }).join('');
+  body.scrollTop = body.scrollHeight;
+}
+
+function getSystemPrompt(personalMode){
+  var d = DATA;
+  var base = 'You are ' + (d.ai.assistantName || 'EMAM-AI') + ', the personal AI assistant representing ' + d.hero.name + '. ' +
+    'Known facts: Role: ' + d.hero.role + '. Status: ' + d.hero.status + '. Bio: ' + d.about.p1 + ' ' + d.about.p2 + ' ' +
+    'Education: ' + d.education.map(function(e){return e.degree+' at '+e.institution+' ('+e.duration+'), '+e.result;}).join('; ') + '. ' +
+    'Projects: ' + d.projects.map(function(p){return p.title+' - '+p.techStack;}).join('; ') + '. ' +
+    'Skills: ' + d.skills.map(function(s){return s.category+': '+s.items;}).join('; ') + '. ' +
+    'Contact: Email ' + d.contact.email + ', Phone ' + d.contact.phone1 + ', Location ' + d.contact.location + ', Address ' + d.contact.address + '. ' +
+    (d.ai.extraKnowledge ? 'Additional notes: ' + d.ai.extraKnowledge + '. ' : '') +
+    (d.ai.persona ? 'Persona style: ' + d.ai.persona + '. ' : '');
+  if(personalMode){
+    base += ' MODE: PERSONAL MENTOR. Speak warmly, practically, like a supportive engineering mentor helping with tech, career, and life decisions.';
+  } else {
+    base += ' MODE: PUBLIC VISITOR. Speak on behalf of MD Emam Masum. Guide visitors through his work politely and professionally. Keep answers clear and concise.';
+  }
+  return base;
+}
+
+function sendChat(){
+  var input = document.getElementById('chat-input');
+  var text = (input.value || '').trim();
+  if(!text) return;
+  input.value = '';
+  var hist = loadChatHistory();
+  hist.push({role:'user', text:text});
+  saveChatHistory(hist);
+  renderChatHistory();
+
+  var isPersonal = document.getElementById('personal-mode-toggle').checked;
+  var sys = getSystemPrompt(isPersonal);
+  var apiKey = (DATA.ai && DATA.ai.apiKey) || '';
+
+  if(!apiKey){
+    setTimeout(function(){
+      var reply = "I am ready! MD Emam Masum specializes in IoT systems, ESP32 firmware, and web apps. To enable live Gemini AI generation, please add your Gemini API key in Admin -> AI Core Settings.";
+      hist.push({role:'bot', text:reply});
+      saveChatHistory(hist);
+      renderChatHistory();
+      speakAI(reply);
+    }, 400);
+    return;
+  }
+
+  callGeminiAPI(text, sys, apiKey, function(reply){
+    hist.push({role:'bot', text:reply});
+    saveChatHistory(hist);
+    renderChatHistory();
+    speakAI(reply);
+  });
+}
+
+function callGeminiAPI(promptText, systemPrompt, apiKey, cb){
+  var currentModel = (DATA.ai && DATA.ai.model) || 'gemini-3.8-flash';
+  // Strip obsolete 1.5/2.0 models
+  if(currentModel.indexOf('1.5') >= 0 || currentModel.indexOf('2.0') >= 0){
+    currentModel = 'gemini-3.8-flash';
+  }
+
+  var candidates = [
+    currentModel,
+    'gemini-3.8-flash',
+    'gemini-3.5-flash-lite',
+    'gemini-3.5-flash',
+    'gemini-flash-latest'
+  ];
+  var modelsToTry = [];
+  candidates.forEach(function(m){
+    var cleaned = m.replace(/^models\//, '').trim();
+    if(cleaned && modelsToTry.indexOf(cleaned) === -1) modelsToTry.push(cleaned);
+  });
+
+  function attempt(idx){
+    if(idx >= modelsToTry.length){
+      cb('I am currently operating in offline mode. Please feel free to reach out to MD Emam Masum directly via Email or WhatsApp!');
+      return;
+    }
+    var m = modelsToTry[idx];
+    var endpoint = 'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(m) + ':generateContent?key=' + encodeURIComponent(apiKey);
+    var body = {
+      contents: [
+        {
+          role: 'user',
+          parts: [{ text: systemPrompt + '\n\nVisitor: ' + promptText }]
+        }
+      ],
+      generationConfig: { maxOutputTokens: 600, temperature: 0.7 }
+    };
+
+    fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    }).then(function(r){
+      if(!r.ok){
+        return r.json().then(function(errObj){
+          console.warn('Gemini model ' + m + ' failed, trying next:', errObj);
+          attempt(idx + 1);
+        }).catch(function(){
+          attempt(idx + 1);
+        });
+        return;
+      }
+      return r.json().then(function(data){
+        var cand = data.candidates && data.candidates[0];
+        var out = cand && cand.content && cand.content.parts && cand.content.parts[0] && cand.content.parts[0].text;
+        if(out){
+          if(DATA.ai.model !== m){
+            DATA.ai.model = m;
+            saveData();
+          }
+          cb(out.trim());
+        } else {
+          attempt(idx + 1);
+        }
+      });
+    }).catch(function(netErr){
+      console.warn('Network issue on model ' + m + ':', netErr);
+      attempt(idx + 1);
+    });
+  }
+
+  attempt(0);
+}
+
+/* ==========================================================================
+   FIREBASE CLOUD SYNC & LOCAL PERSISTENCE
+   ========================================================================== */
+function initFirebase(){
+  if(typeof firebase === 'undefined') return false;
+  try{
+    if(!firebase.apps.length) firebase.initializeApp(FB_CONFIG);
+    fbDb = firebase.firestore();
+    try{ fbDb.settings({ ignoreUndefinedProperties: true }); }catch(e){}
+    try{
+      fbStorage = firebase.storage();
+      if(fbStorage && typeof fbStorage.setMaxUploadRetryTime === 'function') fbStorage.setMaxUploadRetryTime(3000);
+    }catch(se){}
+    return true;
+  }catch(e){
+    console.error(e);
+    return false;
+  }
+}
+
+function setCloudStatus(msg, kind){
+  var el = document.getElementById('cloud-status');
+  if(!el) return;
+  el.textContent = msg;
+  el.className = kind || '';
+}
+
+function updateCloudStatus(){
+  var el = document.getElementById('cloud-status');
+  if(!el || cloudSaveInProgress) return;
+  if(!lastCloudData){
+    setCloudStatus('Local draft only. Click "Upload & Save" to push to Firebase.', 'warn');
+    return;
+  }
+  var dirty = JSON.stringify(DATA) !== JSON.stringify(lastCloudData);
+  if(dirty) setCloudStatus('Unsaved local modifications. Upload & Save to sync.', 'warn');
+  else setCloudStatus('Synced with Firebase cloud.', 'ok');
+}
+
+function flushActiveAdminInputs(){
+  if(document.activeElement && typeof document.activeElement.blur === 'function'){
+    try{ document.activeElement.blur(); }catch(e){}
+  }
+}
+
+function saveToFirebase(opts){
+  var quiet = opts && opts.quiet;
+  var now = Date.now();
+  if(cloudSaveInProgress && (now - lastSaveTimestamp < 1200)){
+    if(!quiet) showToast('Saving in progress, please wait a moment...', 'warn');
+    return Promise.resolve();
+  }
+  if(!initFirebase()){
+    if(!quiet) showToast('Firebase SDK missing or failed to initialize.', 'err');
+    return Promise.reject(new Error('Firebase SDK missing'));
+  }
+
+  flushActiveAdminInputs();
+  cloudSaveInProgress = true;
+  lastSaveTimestamp = now;
+
+  var saveBtns = document.querySelectorAll('.admin-header-tools button.btn-primary, .admin-toolbar-actions button.btn-primary');
+  saveBtns.forEach(function(b){ b.disabled = true; b.textContent = '⏳ Saving...'; });
+
+  setCloudStatus('Saving to Firestore cloud...', 'warn');
+  saveData();
+
+  var ready = JSON.parse(JSON.stringify(DATA, function(k, v){ return v === undefined ? null : v; }));
+  
+  // Sync adminPass directly to site/security doc for instant Firebase Console inspection
+  if(ready.security && ready.security.adminPass){
+    fbDb.collection('site').doc('security').set({
+      adminPass: String(ready.security.adminPass).trim(),
+      writeKey: FIREBASE_WRITE_KEY,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    }).catch(function(e){ console.warn('Direct security sync:', e); });
+  }
+
+  return fbDb.collection('site').doc('content').set({
+    writeKey: FIREBASE_WRITE_KEY,
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    payload: ready
+  }).then(function(){
+    lastCloudData = cloneData(DATA);
+    cloudSaveInProgress = false;
+    saveBtns.forEach(function(b){ b.disabled = false; b.textContent = 'Upload & Save'; });
+    setCloudStatus('✓ Synced with Firebase Firestore (' + FB_CONFIG.projectId + ').', 'ok');
+    render();
+    if(!quiet) showToast('✓ Uploaded & Saved to Firestore successfully!', 'ok');
+  }).catch(function(err){
+    cloudSaveInProgress = false;
+    saveBtns.forEach(function(b){ b.disabled = false; b.textContent = 'Upload & Save'; });
+    var msg = (err && err.message) ? err.message : String(err);
+    setCloudStatus('Save failed: ' + msg, 'err');
+    if(!quiet){
+      alert('Firestore Save Failed: ' + msg);
+      showToast('Save failed: ' + msg, 'err');
+    }
+    throw err;
+  });
+}
+
+function loadFromFirebase(){
+  if(!initFirebase()) return Promise.resolve(false);
+  return fbDb.collection('site').doc('content').get().then(function(snap){
+    if(!snap.exists) return false;
+    var payload = snap.data().payload;
+    if(!payload) return false;
+    var localKey = (DATA.ai && DATA.ai.apiKey) || '';
+    DATA = mergeDefaults(payload);
+    if(localKey && !(DATA.ai && DATA.ai.apiKey)) DATA.ai.apiKey = localKey;
+
+    // Check if security doc has an updated password directly set in Firebase Console
+    fbDb.collection('site').doc('security').get().then(function(secSnap){
+      if(secSnap.exists && secSnap.data() && secSnap.data().adminPass){
+        var p = String(secSnap.data().adminPass).trim();
+        if(p){
+          if(!DATA.security) DATA.security = {};
+          DATA.security.adminPass = p;
+          localStorage.setItem(ADMIN_PASS_KEY, p);
+          saveData();
+        }
+      }
+    }).catch(function(e){ /* non-fatal */ });
+
+    lastCloudData = cloneData(DATA);
+    saveData();
+    return true;
+  }).catch(function(err){
+    console.warn('Firebase read error:', err);
+    return false;
+  });
+}
+
+function undoLocalChanges(){
+  if(!lastCloudData){
+    if(!confirm('No cloud backup found. Reset to default content?')) return;
+    DATA = cloneData(DEFAULT_DATA);
+  } else {
+    if(!confirm('Discard local edits and restore last Firebase cloud state?')) return;
+    DATA = cloneData(lastCloudData);
+  }
+  saveData();
+  applyTheme();
+  render();
+  renderAdminLayout();
+  showToast('Restored state.', 'ok');
+}
+
+/* ==========================================================================
+   THEME CONTROLLER (STRICT DUAL THEME WITH HIGH-CONTRAST TOKENS)
+   ========================================================================== */
+function applyTheme(){
+  var mode = (DATA.theme && DATA.theme.mode) || 'dark';
+  document.documentElement.setAttribute('data-theme', mode);
+  var lbl = document.getElementById('theme-label');
+  if(lbl) lbl.textContent = mode.toUpperCase();
+  var metaTheme = document.querySelector('meta[name="theme-color"]');
+  if(metaTheme) metaTheme.setAttribute('content', mode === 'dark' ? '#07090e' : '#f8fafc');
+}
+function toggleTheme(){
+  DATA.theme.mode = DATA.theme.mode === 'dark' ? 'light' : 'dark';
+  saveData();
+  applyTheme();
+  showToast(DATA.theme.mode.toUpperCase() + ' mode enabled', 'ok');
+}
+
+/* ==========================================================================
+   NAVIGATION, FAST SCROLL OBSERVER & SCROLL PROGRESS
+   ========================================================================== */
+var NAV_SECTIONS = [
+  ['home','Home'],['qualifications','Qualifications'],['about','About Me'],['education','Education'],['projects','Projects'],
+  ['skills','Skills'],['experience','Experience'],['awards','Awards'],
+  ['learning','Learning'],['games','Games'],['contact','Contact'],['references','References']
+];
+
+function renderNav(){
+  var showQual = DATA.qualificationsVisible !== false;
+  var items = NAV_SECTIONS.filter(function(s){
+    if(s[0] === 'qualifications' && !showQual) return false;
+    return true;
+  });
+  var html = items.map(function(s){
+    return '<a href="#'+s[0]+'" data-sec="'+s[0]+'" onclick="closeMobileNav()">'+s[1]+'</a>';
+  }).join('');
+  html += '<a href="javascript:void(0)" onclick="closeMobileNav();installPWA();" style="color:var(--neon1); font-weight:800; border-bottom:none;">📲 Install App</a>';
+  html += '<a href="javascript:void(0)" onclick="closeMobileNav();openAdmin();" style="color:var(--primary); font-weight:800; border-bottom:none;">🔐 Admin CMS</a>';
+  document.getElementById('nav-links').innerHTML = html;
+}
+function toggleMobileNav(){ document.getElementById('nav-links').classList.toggle('open'); }
+function closeMobileNav(){ document.getElementById('nav-links').classList.remove('open'); }
+
+function sigTitle(tag, title){
+  return '<div class="signboard"><h2>' + escapeHtml(title) + '</h2></div>';
+}
+
+function socialRow(){
+  var s = DATA.contact || {};
+  var items = [
+    {key:'facebook', url:s.facebook, color:'#1877F2'},
+    {key:'github',   url:s.github,   color:'#24292e'},
+    {key:'linkedin', url:s.linkedin, color:'#0A66C2'},
+    {key:'mail',     url:'mailto:'+(s.email || DATA.hero.email), color:'#EA4335'},
+    {key:'twitter',  url:s.twitter,  color:'#000000'},
+    {key:'youtube',  url:s.youtube,  color:'#FF0000'},
+    {key:'skype',    url:s.skype,    color:'#00AFF0'}
+  ];
+  return items.map(function(it){
+    var active = it.url && it.url.length > 0;
+    var href = active ? it.url : 'javascript:void(0)';
+    var style = 'background:' + it.color + ';' + (active ? '' : 'opacity:.4;filter:grayscale(1);');
+    return '<a class="social-ic" href="'+href+'" target="_blank" rel="noopener" style="'+style+'" title="'+it.key+(active?'':' (soon)')+'">' + ICONS[it.key] + '</a>';
+  }).join('');
+}
+
+function contactInfoDialog(){
+  var c = DATA.contact || {};
+  var rows = [
+    {icon:'mail',  label:'Email',    value:c.email || DATA.hero.email || 'Not set'},
+    {icon:'phone', label:'Phone',    value:(c.phone1 || '') + (c.phone2 ? ' / ' + c.phone2 : '')},
+    {icon:'pin',   label:'Location', value:c.location || 'Dhaka, Bangladesh'},
+    {icon:'pin',   label:'Address',  value:c.address || 'Kazipara Metro, Mirpur-10, Dhaka'}
+  ];
+  return '<div class="contact-dialog reveal">' + rows.map(function(r){
+    return '<div class="contact-chip"><span class="chip-ic">'+ICONS[r.icon]+'</span>' +
+      '<div class="chip-text"><b>'+r.label+'</b><span>'+escapeHtml(r.value)+'</span></div></div>';
+  }).join('') + '</div>';
+}
+
+/* ==========================================================================
+   PAGE SECTIONS GENERATOR
+   ========================================================================== */
+function heroSection(){
+  var h = DATA.hero;
+  var photoHtml = h.photo
+    ? '<div class="hero-photo-frame"><img class="hero-photo" src="'+h.photo+'" alt="'+escapeHtml(h.name)+'"></div>'
+    : '<div class="hero-photo-frame"><div class="hero-avatar"><b>MEM</b><span>MD EMAM MASUM</span></div></div>';
+
+  return '<section id="home"><div class="container hero-grid">' +
+    '<div>' +
+      '<span class="pill">' + escapeHtml(h.greetingPill || 'OPEN TO OPPORTUNITIES') + '</span>' +
+      '<h1 class="hero-name">' + escapeHtml(h.name) + '</h1>' +
+      '<p class="hero-role">' + escapeHtml(h.role) + '</p>' +
+      '<div class="terminal-line" id="typed-line"></div>' +
+      '<div style="margin:14px 0;">' +
+        '<button class="btn-voice-hero" onclick="playWelcomeVoice(true)">' +
+          '<span>🎙️</span> Hear Voice Welcome from Masum\'s AI' +
+        '</button>' +
+      '</div>' +
+      '<div class="skill-pill-row">' +
+        DATA.skills.slice(0, 6).map(function(s){ return '<span class="skill-pill">'+escapeHtml(s.category)+'</span>'; }).join('') +
+      '</div>' +
+      '<div class="btn-row">' +
+        '<a class="btn-primary" href="'+(h.cta1Link || '#projects')+'">'+escapeHtml(h.cta1Text || 'View Projects')+'</a>' +
+        '<a class="btn-ghost" href="'+(h.cta2Link || '#contact')+'">'+escapeHtml(h.cta2Text || 'Connect With Me')+'</a>' +
+        '<button class="btn-ghost" onclick="openDocModal(0)" style="display:inline-flex; align-items:center; gap:6px; border-color:var(--primary); color:var(--primary); font-weight:700;" title="Instant View CV / Resume"><span>📄</span> View CV</button>' +
+      '</div>' +
+      '<div class="stat-row">' +
+        '<div class="stat-card"><b>'+escapeHtml(h.stat1Val || '9+')+'</b><span>'+escapeHtml(h.stat1Label || 'PROJECTS')+'</span></div>' +
+        '<div class="stat-card"><b>'+escapeHtml(h.stat2Val || '3+')+'</b><span>'+escapeHtml(h.stat2Label || 'IOT BUILDS')+'</span></div>' +
+        '<div class="stat-card"><b>'+escapeHtml(h.stat3Val || 'Final')+'</b><span>'+escapeHtml(h.stat3Label || 'YEAR CSE')+'</span></div>' +
+        '<div class="stat-card"><b>'+escapeHtml(h.stat4Val || '2026')+'</b><span>'+escapeHtml(h.stat4Label || 'GRADUATION')+'</span></div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="hero-photo-wrap">' + photoHtml + '</div>' +
+  '</div></section>';
+}
+
+function aboutSection(){
+  var a = DATA.about || {};
+  var pDetails = DATA.personalDetails || {};
+  
+  var highlightsHtml = (a.highlights && a.highlights.length)
+    ? '<div class="about-highlights-grid">' + a.highlights.map(function(h){
+        return '<div class="highlight-item"><b>'+escapeHtml(h.title)+'</b><span>'+escapeHtml(h.desc)+'</span></div>';
+      }).join('') + '</div>'
+    : '';
+
+  return '<section id="about"><div class="container ghost-wrap reveal">' +
+    '<div class="ghost-text">ABOUT</div>' +
+    '<div class="section-head">' + sigTitle('about', a.heading || 'About Me') + '</div>' +
+    '<div class="about-narrative">' +
+      '<div class="narrative-card">' +
+        '<h3><span>🧭</span> Executive Profile &amp; Mission</h3>' +
+        '<p>' + escapeHtml(a.p1 || a.bio) + '</p>' +
+      '</div>' +
+      '<div class="narrative-card">' +
+        '<h3><span>🌾</span> The Engineering Journey &amp; AgroSense Hardware Odyssey</h3>' +
+        '<p>' + escapeHtml(a.p2 || '') + '</p>' +
+      '</div>' +
+      '<div class="narrative-card">' +
+        '<h3><span>⚡</span> Full-Stack Web &amp; Embedded Systems Craftsmanship</h3>' +
+        '<p>' + escapeHtml(a.p3 || '') + '</p>' +
+      '</div>' +
+      '<div class="narrative-card">' +
+        '<h3><span>🎯</span> Work Ethic, Discipline &amp; Future Vision</h3>' +
+        '<p>' + escapeHtml(a.p4 || '') + '</p>' +
+        highlightsHtml +
+      '</div>' +
+    '</div>' +
+    '<div class="grid-2" style="margin-top:24px;">' +
+      '<div class="card"><h3>Personal Information</h3>' +
+        Object.keys(pDetails).map(function(k){
+          return '<p style="margin:4px 0; font-size:.92rem;"><b style="color:var(--primary); text-transform:capitalize;">'+k+':</b> '+escapeHtml(pDetails[k])+'</p>';
+        }).join('') +
+      '</div>' +
+      '<div class="card"><h3>Core Engineering Pillars</h3><div class="tag-row">' +
+        ['IoT Systems','Sensor Networks','ESP32 Firmware','Full-Stack Web Dev','Firebase & Cloud','Automation','AI Integration','System Architecture'].map(function(t){
+          return '<span class="tag-chip">'+t+'</span>';
+        }).join('') +
+      '</div></div>' +
+    '</div>' +
+  '</div></section>';
+}
+
+function educationSection(){
+  return '<section id="education"><div class="container reveal">' +
+    '<div class="section-head">' + sigTitle('education','Education') + '</div>' +
+    '<div class="grid-2">' + DATA.education.map(function(e){
+      return '<div class="card"><h3>'+escapeHtml(e.degree)+'</h3>' +
+        '<p style="color:var(--text-secondary); font-weight:600;">'+escapeHtml(e.institution)+'</p>' +
+        '<p style="color:var(--primary); font-weight:700; margin:4px 0;">'+escapeHtml(e.duration)+'</p>' +
+        '<p style="font-weight:700;">'+escapeHtml(e.result)+'</p>' +
+        (e.details ? '<p style="margin-top:8px; font-size:.88rem; color:var(--muted);">'+escapeHtml(e.details)+'</p>' : '') +
+      '</div>';
+    }).join('') + '</div>' +
+  '</div></section>';
+}
+
+function projectsSection(){
+  return '<section id="projects"><div class="container reveal">' +
+    '<div class="section-head">' + sigTitle('projects','Featured Projects & Hardware') + '</div>' +
+    '<div class="grid-3">' + DATA.projects.map(function(p){
+      return '<div class="card project-card">' +
+        (p.imageUrl ? '<img class="project-cover" src="'+p.imageUrl+'" alt="'+escapeHtml(p.title)+'" loading="lazy">' : '') +
+        '<h3>'+escapeHtml(p.title)+'</h3>' +
+        '<div class="tag-row"><span class="tag-chip">'+escapeHtml(p.category)+'</span>' + (isIoTProject(p) ? '<span class="iot-badge">IoT CORE</span>' : '') + '</div>' +
+        '<p><b>Stack:</b> '+escapeHtml(p.techStack)+'</p>' +
+        '<p style="margin-top:6px;">'+escapeHtml(p.description)+'</p>' +
+        '<div class="btn-row">' +
+          (p.demoLink ? '<a class="btn-ghost" href="'+p.demoLink+'" target="_blank" rel="noopener">Live Demo</a>' : '<a class="btn-ghost" href="#contact">Request Demo</a>') +
+          (p.repoLink ? '<a class="btn-ghost" href="'+p.repoLink+'" target="_blank" rel="noopener">Repository</a>' : '<a class="btn-ghost" href="https://github.com/masum5672" target="_blank">GitHub</a>') +
+          (p.videoUrl ? '<a class="btn-ghost" href="'+p.videoUrl+'" target="_blank" rel="noopener">Video</a>' : '') +
+        '</div>' +
+      '</div>';
+    }).join('') + '</div>' +
+  '</div></section>';
+}
+
+function skillsSection(){
+  return '<section id="skills"><div class="container reveal">' +
+    '<div class="section-head">' + sigTitle('skills','Technical Skills & Expertise') + '</div>' +
+    '<div class="grid-3">' + DATA.skills.map(function(s){
+      return '<div class="card"><h3>'+escapeHtml(s.category)+'</h3><div class="tag-row">' +
+        s.items.split(',').map(function(i){ return '<span class="tag-chip">'+escapeHtml(i.trim())+'</span>'; }).join('') +
+      '</div></div>';
+    }).join('') + '</div>' +
+  '</div></section>';
+}
+
+function experienceSection(){
+  return '<section id="experience"><div class="container reveal">' +
+    '<div class="section-head">' + sigTitle('experience','Experience & Research') + '</div>' +
+    '<div class="grid-2">' + DATA.experience.map(function(x){
+      return '<div class="card"><h3>'+escapeHtml(x.role)+'</h3>' +
+        '<p style="color:var(--text-secondary); font-weight:600;">'+escapeHtml(x.org)+'</p>' +
+        '<p style="color:var(--primary); font-weight:700; margin:4px 0;">'+escapeHtml(x.duration)+'</p>' +
+        '<p style="margin-top:6px; color:var(--muted);">'+escapeHtml(x.description)+'</p>' +
+      '</div>';
+    }).join('') + '</div>' +
+  '</div></section>';
+}
+
+function awardsSection(){
+  return '<section id="awards"><div class="container reveal">' +
+    '<div class="section-head">' + sigTitle('awards','Awards & Honors') + '</div>' +
+    '<div class="grid-3">' + DATA.awards.map(function(a){
+      return '<div class="card"><h3>'+escapeHtml(a.title)+'</h3><p style="color:var(--primary); font-weight:700;">'+escapeHtml(a.issuer)+' — '+escapeHtml(a.year)+'</p><p style="margin-top:6px; color:var(--muted);">'+escapeHtml(a.description)+'</p></div>';
+    }).join('') + '</div>' +
+  '</div></section>';
+}
+
+function qualificationsSection(){
+  var title = (DATA.qualificationsTitle || 'Check My Qualifications Here');
+  return '<section id="qualifications"><span id="downloads" style="display:block; position:relative; top:-90px; visibility:hidden;"></span><div class="container reveal">' +
+    '<div class="section-head">' + sigTitle('qualifications', title) + '</div>' +
+    '<div style="display:flex; flex-direction:column; gap:8px;">' +
+    DATA.downloads.map(function(d, i){
+      var rawUrl = getDocDownloadUrl(d);
+      var isMail = !rawUrl || rawUrl.startsWith('mailto:');
+      var badgeText = d.fileType || (isMail ? 'ON REQUEST' : 'PDF');
+      var iconEmoji = (d.fileType && d.fileType.indexOf('IMG') >= 0) ? '🖼️' : '📄';
+
+      return '<div class="doc-card" onclick="openDocModal('+i+')" title="Touch to view on screen">' +
+        '<div class="doc-icon">'+iconEmoji+'</div>' +
+        '<div class="doc-info">' +
+          '<b>' + escapeHtml(d.title) + ' <span class="doc-type-badge">' + escapeHtml(badgeText) + '</span></b>' +
+          '<span>' + escapeHtml(d.note) + '</span>' +
+        '</div>' +
+        '<div class="doc-actions" onclick="event.stopPropagation()">' +
+          '<button class="btn-doc-view" onclick="openDocModal('+i+')" title="View on screen without downloading">' +
+            '<span>👁️</span> ' + (isMail ? 'Request' : 'View') +
+          '</button>' +
+          (!isMail ? '<button class="btn-doc-download" onclick="directDownloadDoc('+i+', event)" title="Download file to device"><span>⬇️</span> Download</button>' : '') +
+        '</div>' +
+      '</div>';
+    }).join('') +
+    '</div>' +
+  '</div></section>';
+}
+var downloadsSection = qualificationsSection;
+
+function learningSection(){
+  return '<section id="learning"><div class="container reveal">' +
+    '<div class="section-head">' + sigTitle('learning','Currently Exploring & Learning') + '</div>' +
+    '<div class="grid-3">' + DATA.learning.map(function(l){
+      return '<div class="card"><h3>'+escapeHtml(l.title)+'</h3><p style="color:var(--primary); font-weight:700;"><b>'+escapeHtml(l.provider)+'</b> — '+escapeHtml(l.status)+'</p><p style="margin-top:6px; color:var(--muted);">'+escapeHtml(l.description)+'</p></div>';
+    }).join('') + '</div>' +
+  '</div></section>';
+}
+
+function referencesSection(){
+  return '<section id="references"><div class="container reveal">' +
+    '<div class="section-head">' + sigTitle('references','References') + '</div>' +
+    '<div class="grid-2">' + DATA.references.map(function(r){
+      return '<div class="card"><h3>'+escapeHtml(r.name)+'</h3>' +
+        '<p style="font-weight:600;">'+escapeHtml(r.designation)+'</p>' +
+        '<p style="color:var(--text-secondary);">'+escapeHtml(r.organization)+'</p>' +
+        '<p style="margin-top:6px;"><b>Phone:</b> '+escapeHtml(r.phone)+'</p>' +
+        '<p><b>Email:</b> '+escapeHtml(r.email)+'</p>' +
+        '<span class="tag-chip" style="margin-top:10px; display:inline-block;">'+escapeHtml(r.relation)+'</span>' +
+      '</div>';
+    }).join('') + '</div>' +
+  '</div></section>';
+}
+
+function contactSection(){
+  return '<section id="contact"><div class="container reveal">' +
+    '<div class="section-head">' + sigTitle('contact','Connect With Me') + '</div>' +
+    contactInfoDialog() +
+    '<div class="social-row">' + socialRow() + '</div>' +
+    '<div class="card" style="max-width:540px;">' +
+      '<h3 style="margin-bottom:12px;">Direct Email Dispatch</h3>' +
+      '<div class="form-field"><label>Your Name</label><input id="contact-name" placeholder="John Doe"></div>' +
+      '<div class="form-field"><label>Your Email</label><input id="contact-email" placeholder="john@example.com"></div>' +
+      '<div class="form-field"><label>Your Message</label><textarea id="contact-msg" rows="3" placeholder="Write your message or inquiry here..."></textarea></div>' +
+      '<button class="btn-primary" onclick="sendContactMessage()">Send via Email Client</button>' +
+    '</div>' +
+  '</div></section>';
+}
+function sendContactMessage(){
+  var n = document.getElementById('contact-name').value;
+  var e = document.getElementById('contact-email').value;
+  var m = document.getElementById('contact-msg').value;
+  var body = 'Sender: ' + n + '\nEmail: ' + e + '\n\n' + m;
+  window.location.href = 'mailto:' + (DATA.contact.email || DATA.hero.email) + '?subject=Portfolio%20Inquiry%20from%20' + encodeURIComponent(n) + '&body=' + encodeURIComponent(body);
+}
+
+/* ==========================================================================
+   MINI GAMES SECTION
+   ========================================================================== */
+var GAMES_LIST = [
+  ['ttt','Tic-Tac-Toe','TTT'], ['rps','Rock Paper Scissors','RPS'], ['memory','Memory Match','MEM'],
+  ['reaction','Reaction Timer','RXN'], ['guess','Number Guessing','#'], ['mole','Whack-a-Mole','WAM'],
+  ['typing','Typing Speed','TYP'], ['snake','Retro Snake','SNK']
+];
+function gamesSection(){
+  return '<section id="games"><div class="container reveal">' +
+    '<div class="section-head">' + sigTitle('games','Interactive Mini-Games') + '</div>' +
+    '<div class="grid-4">' + GAMES_LIST.map(function(g){
+      return '<div class="game-card" onclick="openGame(\''+g[0]+'\')"><div class="gi">'+g[2]+'</div><h3>'+g[1]+'</h3></div>';
+    }).join('') + '</div>' +
+    '<div id="game-active-area"><p style="color:var(--muted);">Click any game above to launch in this interactive arena.</p></div>' +
+  '</div></section>';
+}
+
+function openGame(name){
+  var area = document.getElementById('game-active-area');
+  area.scrollIntoView({behavior:'smooth'});
+  if(name==='ttt') initTTT(area);
+  else if(name==='rps') initRPS(area);
+  else if(name==='memory') initMemory(area);
+  else if(name==='reaction') initReaction(area);
+  else if(name==='guess') initGuess(area);
+  else if(name==='mole') initMole(area);
+  else if(name==='typing') initTyping(area);
+  else if(name==='snake') initSnake(area);
+}
+
+/* Tic Tac Toe */
+var tttBoard, tttOver;
+function initTTT(area){
+  tttBoard = ['','','','','','','','','']; tttOver = false;
+  area.innerHTML = '<h3>Tic-Tac-Toe (You: O | AI: X)</h3><div class="ttt-board" id="ttt-grid"></div><p id="ttt-msg"></p><button class="btn-ghost" style="margin-top:10px;" onclick="initTTT(document.getElementById(\'game-active-area\'))">Restart</button>';
+  renderTTT();
+}
+function renderTTT(){
+  document.getElementById('ttt-grid').innerHTML = tttBoard.map(function(c,i){
+    return '<div class="ttt-cell" onclick="tttMove('+i+')">'+c+'</div>';
+  }).join('');
+}
+function tttMove(i){
+  if(tttOver || tttBoard[i]) return;
+  tttBoard[i]='O';
+  if(checkTTTWin('O')){ renderTTT(); document.getElementById('ttt-msg').textContent='You win! 🎉'; tttOver=true; return; }
+  if(tttBoard.every(function(c){return c;})){ renderTTT(); document.getElementById('ttt-msg').textContent='Draw!'; tttOver=true; return; }
+  var best = -1;
+  for(var j=0; j<9; j++){ if(!tttBoard[j]){ best=j; break; } }
+  if(best!==-1) tttBoard[best]='X';
+  renderTTT();
+  if(checkTTTWin('X')){ document.getElementById('ttt-msg').textContent='AI wins!'; tttOver=true; return; }
+}
+function checkTTTWin(p){
+  var w = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+  return w.some(function(l){ return l.every(function(i){ return tttBoard[i]===p; }); });
+}
+
+/* Rock Paper Scissors */
+var rpsScore = {you:0, cpu:0};
+function initRPS(area){
+  rpsScore = {you:0, cpu:0};
+  area.innerHTML = '<h3>Rock Paper Scissors</h3>' +
+    '<div class="btn-row" style="justify-content:center;"><button class="btn-primary" onclick="rpsPlay(\'rock\')">✊ Rock</button>' +
+    '<button class="btn-primary" onclick="rpsPlay(\'paper\')">✋ Paper</button>' +
+    '<button class="btn-primary" onclick="rpsPlay(\'scissors\')">✌️ Scissors</button></div>' +
+    '<p id="rps-msg" style="margin-top:14px; font-weight:700;"></p><p id="rps-score" style="color:var(--muted);">You: 0 | CPU: 0</p>';
+}
+function rpsPlay(choice){
+  var opts = ['rock','paper','scissors'];
+  var cpu = opts[Math.floor(Math.random()*3)];
+  var res = choice===cpu ? 'Draw' : ((choice==='rock'&&cpu==='scissors')||(choice==='paper'&&cpu==='rock')||(choice==='scissors'&&cpu==='paper')) ? 'You win! 🎉' : 'CPU wins!';
+  if(res.indexOf('You')>=0) rpsScore.you++; else if(res.indexOf('CPU')>=0) rpsScore.cpu++;
+  document.getElementById('rps-msg').textContent = 'You: ' + choice + ' vs CPU: ' + cpu + ' ➔ ' + res;
+  document.getElementById('rps-score').textContent = 'You: ' + rpsScore.you + ' | CPU: ' + rpsScore.cpu;
+}
+
+/* Memory Match */
+var memCards, memFlipped, memMatchedCount;
+function initMemory(area){
+  var symbols = ['⚡','🌾','🤖','💡','🛠️','💻'];
+  var deck = symbols.concat(symbols).sort(function(){return Math.random()-0.5;});
+  memCards = deck.map(function(s){ return {symbol:s, flipped:false, matched:false}; });
+  memFlipped = []; memMatchedCount = 0;
+  area.innerHTML = '<h3>Memory Match</h3><div class="mem-grid" id="mem-grid"></div><p id="mem-msg" style="margin-top:10px;"></p>';
+  renderMemory();
+}
+function renderMemory(){
+  document.getElementById('mem-grid').innerHTML = memCards.map(function(c,i){
+    var show = c.flipped || c.matched;
+    return '<div class="mem-card" onclick="memFlip('+i+')">'+(show?c.symbol:'?')+'</div>';
+  }).join('');
+}
+function memFlip(i){
+  if(memCards[i].flipped || memCards[i].matched || memFlipped.length===2) return;
+  memCards[i].flipped = true; memFlipped.push(i); renderMemory();
+  if(memFlipped.length===2){
+    var a=memFlipped[0], b=memFlipped[1];
+    if(memCards[a].symbol === memCards[b].symbol){
+      memCards[a].matched = true; memCards[b].matched = true; memFlipped=[]; memMatchedCount++;
+      if(memMatchedCount===6) document.getElementById('mem-msg').textContent='Great job! All pairs matched!';
+    } else {
+      setTimeout(function(){ memCards[a].flipped=false; memCards[b].flipped=false; memFlipped=[]; renderMemory(); }, 600);
+    }
+  }
+}
+
+/* Reaction Timer */
+var reactState='idle', reactStart=0;
+function initReaction(area){
+  reactState='idle';
+  area.innerHTML = '<h3>Reaction Speed Test</h3><div class="card" id="react-box" style="padding:36px; text-align:center; cursor:pointer; background:var(--surface2);" onclick="reactClick()">Click here to Start</div><p id="react-msg" style="margin-top:10px; font-weight:700;"></p>';
+}
+function reactClick(){
+  var box = document.getElementById('react-box');
+  if(reactState==='idle'){
+    reactState='waiting'; box.textContent='Wait for green...'; box.style.background='var(--surface2)';
+    setTimeout(function(){
+      if(reactState==='waiting'){ reactState='ready'; reactStart=Date.now(); box.textContent='CLICK NOW!'; box.style.background='var(--neon1)'; box.style.color='#000'; }
+    }, 1000 + Math.random()*2000);
+  } else if(reactState==='waiting'){
+    reactState='idle'; box.textContent='Too soon! Click to retry.'; box.style.background='var(--surface2)';
+  } else if(reactState==='ready'){
+    var t = Date.now() - reactStart;
+    document.getElementById('react-msg').textContent = 'Reaction Time: ' + t + ' ms';
+    reactState='idle'; box.textContent='Click to Try Again'; box.style.background='var(--surface2)'; box.style.color='var(--text)';
+  }
+}
+
+/* Number Guess */
+var guessTarget, guessAttempts;
+function initGuess(area){
+  guessTarget = Math.floor(Math.random()*100)+1; guessAttempts=0;
+  area.innerHTML = '<h3>Number Guess (1 to 100)</h3>' +
+    '<div style="display:inline-flex; gap:8px; margin-top:10px;"><input id="guess-input" type="number" style="padding:8px 12px; border-radius:8px; border:1px solid var(--border); background:var(--surface2); color:var(--text); width:120px;" placeholder="1-100">' +
+    '<button class="btn-primary" onclick="guessCheck()">Guess</button></div><p id="guess-msg" style="margin-top:12px; font-weight:700;"></p>';
+}
+function guessCheck(){
+  var val = parseInt(document.getElementById('guess-input').value,10);
+  if(isNaN(val)) return;
+  guessAttempts++;
+  var msg = document.getElementById('guess-msg');
+  if(val===guessTarget) msg.textContent = 'Spot on! Solved in ' + guessAttempts + ' attempts! 🎉';
+  else if(val<guessTarget) msg.textContent = 'Higher! Attempts: ' + guessAttempts;
+  else msg.textContent = 'Lower! Attempts: ' + guessAttempts;
+}
+
+/* Whack a Mole */
+var moleScore=0, moleTimerId=null, moleTimeLeft=20, moleActiveIdx=-1, moleIntervalId=null;
+function initMole(area){
+  moleScore=0; moleTimeLeft=20;
+  area.innerHTML = '<h3>Whack-a-Mole</h3><p>Score: <span id="mole-score">0</span> | Time: <span id="mole-time">20</span>s</p>' +
+    '<div class="mole-grid" id="mole-grid"></div>';
+  renderMole();
+  clearInterval(moleTimerId); clearInterval(moleIntervalId);
+  moleTimerId = setInterval(function(){
+    moleTimeLeft--;
+    var t = document.getElementById('mole-time');
+    if(t) t.textContent = moleTimeLeft;
+    if(moleTimeLeft<=0){
+      clearInterval(moleTimerId); clearInterval(moleIntervalId);
+      var g = document.getElementById('mole-grid');
+      if(g) g.innerHTML = '<p style="grid-column:span 3; font-weight:800;">Time is up! Final Score: '+moleScore+'</p>';
+    }
+  }, 1000);
+  moleIntervalId = setInterval(function(){
+    moleActiveIdx = Math.floor(Math.random()*9);
+    renderMole();
+  }, 750);
+}
+function renderMole(){
+  var grid = document.getElementById('mole-grid');
+  if(!grid) return;
+  grid.innerHTML = '';
+  for(var i=0; i<9; i++){
+    var d = document.createElement('div');
+    d.className = 'mole-hole' + (i===moleActiveIdx ? ' up' : '');
+    d.onclick = (function(idx){
+      return function(){
+        if(idx===moleActiveIdx){
+          moleScore++;
+          var s = document.getElementById('mole-score');
+          if(s) s.textContent = moleScore;
+          moleActiveIdx = -1;
+          renderMole();
+        }
+      };
+    })(i);
+    grid.appendChild(d);
+  }
+}
+
+/* Typing Speed */
+var typingSentence = "Technology connects ideas with the real world through code and electronics.";
+var typingStartTime = null;
+function initTyping(area){
+  typingStartTime = null;
+  area.innerHTML = '<h3>Typing Speed Test</h3><p style="color:var(--muted); margin-bottom:8px;">'+typingSentence+'</p>' +
+    '<textarea id="typing-input" rows="2" style="width:100%; max-width:480px; padding:8px 12px; border-radius:8px; background:var(--surface2); border:1px solid var(--border); color:var(--text);" oninput="typingCheck()"></textarea>' +
+    '<p id="typing-result" style="margin-top:8px; font-weight:700;"></p>';
+}
+function typingCheck(){
+  var val = document.getElementById('typing-input').value;
+  if(!typingStartTime && val.length > 0) typingStartTime = Date.now();
+  if(val.trim() === typingSentence.trim()){
+    var s = (Date.now() - typingStartTime) / 1000;
+    var w = typingSentence.split(' ').length;
+    var wpm = Math.round((w / s) * 60);
+    document.getElementById('typing-result').textContent = 'Completed in ' + s.toFixed(1) + 's (' + wpm + ' WPM)!';
+  }
+}
+
+/* Snake */
+var snakeCtx, snakeBody, snakeDir, snakeFood, snakeLoopId, snakeScore;
+function initSnake(area){
+  area.innerHTML = '<h3>Classic Snake</h3><p>Score: <span id="snake-score">0</span></p><canvas id="snake-canvas" width="280" height="200" style="background:#0a0e17; border-radius:8px; margin:8px auto; display:block;"></canvas><p style="color:var(--muted); font-size:.78rem;">Use Arrow Keys to control</p>';
+  snakeCtx = document.getElementById('snake-canvas').getContext('2d');
+  snakeBody = [{x:5,y:5}]; snakeDir = {x:1,y:0}; snakeScore = 0;
+  snakeFood = {x:10, y:8};
+  clearInterval(snakeLoopId);
+  snakeLoopId = setInterval(snakeStep, 130);
+  document.onkeydown = function(e){
+    if(e.key==='ArrowUp' && snakeDir.y===0) snakeDir={x:0,y:-1};
+    else if(e.key==='ArrowDown' && snakeDir.y===0) snakeDir={x:0,y:1};
+    else if(e.key==='ArrowLeft' && snakeDir.x===0) snakeDir={x:-1,y:0};
+    else if(e.key==='ArrowRight' && snakeDir.x===0) snakeDir={x:1,y:0};
+  };
+}
+function snakeStep(){
+  var head = {x:snakeBody[0].x+snakeDir.x, y:snakeBody[0].y+snakeDir.y};
+  if(head.x<0||head.x>=20||head.y<0||head.y>=14 || snakeBody.some(function(s){return s.x===head.x&&s.y===head.y;})){
+    clearInterval(snakeLoopId); document.onkeydown=null; return;
+  }
+  snakeBody.unshift(head);
+  if(head.x===snakeFood.x && head.y===snakeFood.y){
+    snakeScore++; document.getElementById('snake-score').textContent = snakeScore;
+    snakeFood = {x:Math.floor(Math.random()*19), y:Math.floor(Math.random()*13)};
+  } else {
+    snakeBody.pop();
+  }
+  snakeCtx.fillStyle = '#0a0e17'; snakeCtx.fillRect(0,0,280,200);
+  snakeCtx.fillStyle = '#84cc16';
+  snakeBody.forEach(function(s){ snakeCtx.fillRect(s.x*14, s.y*14, 12, 12); });
+  snakeCtx.fillStyle = '#f59e0b';
+  snakeCtx.fillRect(snakeFood.x*14, snakeFood.y*14, 12, 12);
+}
+
+/* ==========================================================================
+   FAST SCROLL ANIMATION & OBSERVERS (ZERO LAG, INSTANT TRIGGER)
+   ========================================================================== */
+function initReveal(){
+  var els = document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)){
+    els.forEach(function(e){ e.classList.add('reveal-visible'); });
+    return;
+  }
+  var obs = new IntersectionObserver(function(entries, observer){
+    entries.forEach(function(en){
+      if(en.isIntersecting){
+        en.target.classList.add('reveal-visible');
+        observer.unobserve(en.target);
+      }
+    });
+  }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
+  els.forEach(function(e){ obs.observe(e); });
+}
+
+function initScrollspy(){
+  var links = document.querySelectorAll('#nav-links a');
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){
+        links.forEach(function(l){ l.classList.remove('active'); });
+        var active = document.querySelector('#nav-links a[data-sec="'+en.target.id+'"]');
+        if(active) active.classList.add('active');
+      }
+    });
+  }, { threshold: 0.25 });
+  NAV_SECTIONS.forEach(function(s){
+    var sec = document.getElementById(s[0]);
+    if(sec) obs.observe(sec);
+  });
+}
+
+var scrollTicking = false;
+window.addEventListener('scroll', function(){
+  if(!scrollTicking){
+    window.requestAnimationFrame(function(){
+      var h = document.documentElement;
+      var pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+      var bar = document.getElementById('nav-progress');
+      if(bar) bar.style.width = pct + '%';
+      scrollTicking = false;
+    });
+    scrollTicking = true;
+  }
+}, { passive: true });
+
+/* ==========================================================================
+   PARTICLES (FRAME-CAPPED & RESIZE THROTTLED)
+   ========================================================================== */
+function initParticles(){
+  var c = document.getElementById('particles');
+  if(!c) return;
+  var ctx = c.getContext('2d');
+  function resize(){
+    c.width = window.innerWidth;
+    c.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize, { passive: true });
+
+  var count = window.innerWidth < 768 ? 20 : 35;
+  var pts = [];
+  for(var i=0; i<count; i++){
+    pts.push({
+      x: Math.random() * c.width,
+      y: Math.random() * c.height,
+      vx: (Math.random() - 0.5) * 0.35,
+      vy: (Math.random() - 0.5) * 0.35,
+      r: Math.random() * 1.5 + 0.8
+    });
+  }
+
+  function loop(){
+    if(!document.hidden){
+      ctx.clearRect(0, 0, c.width, c.height);
+      ctx.fillStyle = '#84cc16';
+      for(var j=0; j<pts.length; j++){
+        var p = pts[j];
+        p.x += p.vx; p.y += p.vy;
+        if(p.x < 0) p.x = c.width;
+        if(p.x > c.width) p.x = 0;
+        if(p.y < 0) p.y = c.height;
+        if(p.y > c.height) p.y = 0;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, 6.28);
+        ctx.fill();
+      }
+    }
+    requestAnimationFrame(loop);
+  }
+  loop();
+}
+
+/* ==========================================================================
+   TYPED HERO LINE ANIMATION
+   ========================================================================== */
+function initTypedLine(){
+  var el = document.getElementById('typed-line');
+  if(!el) return;
+  var messages = (DATA.hero && DATA.hero.typingMessages && DATA.hero.typingMessages.length)
+    ? DATA.hero.typingMessages
+    : ['Architecting IoT smart systems with ESP32 & Cloud...', 'Building AgroSense crop monitoring...', 'Crafting responsive full-stack web experiences...'];
+  var mi=0, ci=0, deleting=false;
+  function tick(){
+    var msg = messages[mi];
+    if(!deleting){
+      ci++;
+      el.innerHTML = msg.substring(0, ci) + '<span class="caret">&nbsp;</span>';
+      if(ci === msg.length){ deleting=true; setTimeout(tick, 1600); return; }
+    } else {
+      ci--;
+      el.innerHTML = msg.substring(0, ci) + '<span class="caret">&nbsp;</span>';
+      if(ci === 0){ deleting=false; mi = (mi+1)%messages.length; }
+    }
+    setTimeout(tick, deleting ? 25 : 45);
+  }
+  tick();
+}
+
+/* ==========================================================================
+   FEEDBACK & HIRE MODALS
+   ========================================================================== */
+function openFeedback(){ document.getElementById('feedback-modal').classList.remove('hidden'); }
+function closeFeedback(){ document.getElementById('feedback-modal').classList.add('hidden'); }
+function submitFeedback(){
+  var name = document.getElementById('fb-name').value || 'Visitor';
+  var email = document.getElementById('fb-email').value || '';
+  var rating = parseInt(document.getElementById('fb-rating').value, 10) || 5;
+  var msg = document.getElementById('fb-msg').value || '';
+  if(!msg){ showToast('Please write a message', 'warn'); return; }
+  DATA.feedback = DATA.feedback || [];
+  DATA.feedback.unshift({name:name, email:email, rating:rating, message:msg, date:new Date().toISOString()});
+  saveData();
+  closeFeedback();
+  showToast('Thank you for your feedback! ⭐', 'ok');
+}
+
+function openHire(){ document.getElementById('hire-modal').classList.remove('hidden'); }
+function closeHire(){ document.getElementById('hire-modal').classList.add('hidden'); }
+
+/* ==========================================================================
+   DOCUMENT & CV SMART VIEWER / DOWNLOAD HANDLERS (INSTANT 1-TAP OPEN & DOWNLOAD)
+   ========================================================================== */
+var currentViewingDoc = null;
+var activeBlobUrl = null;
+
+function getDocDownloadUrl(d){
+  if(!d) return '';
+  return (d.uploadedFile || d.fileUrl || '').trim();
+}
+
+function parseGoogleDriveUrl(url){
+  if(!url) return null;
+  var match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) ||
+              url.match(/[?&]id=([a-zA-Z0-9_-]+)/) ||
+              url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  if(match && match[1]){
+    var fileId = match[1];
+    return {
+      fileId: fileId,
+      previewUrl: 'https://drive.google.com/file/d/' + fileId + '/preview',
+      downloadUrl: 'https://drive.google.com/uc?export=download&id=' + fileId,
+      viewUrl: 'https://drive.google.com/file/d/' + fileId + '/view'
+    };
+  }
+  return null;
+}
+
+function base64ToBlobUrl(base64Data){
+  try {
+    var parts = base64Data.split(',');
+    var mimeMatch = parts[0].match(/:(.*?);/);
+    var mime = mimeMatch ? mimeMatch[1] : 'application/pdf';
+    var byteString = atob(parts[1]);
+    var ab = new ArrayBuffer(byteString.length);
+    var ia = new Uint8Array(ab);
+    for(var i = 0; i < byteString.length; i++){
+      ia[i] = byteString.charCodeAt(i);
+    }
+    var blob = new Blob([ab], { type: mime });
+    return URL.createObjectURL(blob);
+  } catch(e) {
+    console.error('Base64 convert error:', e);
+    return null;
+  }
+}
+
+function openDocModal(idx){
+  var d = (DATA.downloads && DATA.downloads[idx]) ? DATA.downloads[idx] : null;
+  if(!d) return;
+  currentViewingDoc = d;
+
+  var modal = document.getElementById('doc-preview-modal');
+  var heading = document.getElementById('doc-modal-heading');
+  var sub = document.getElementById('doc-modal-sub');
+  var icon = document.getElementById('doc-modal-icon');
+  var body = document.getElementById('doc-modal-body');
+  var tabBtn = document.getElementById('doc-modal-tab-btn');
+  var downBtn = document.getElementById('doc-modal-down-btn');
+
+  if(!modal || !body) return;
+
+  if(activeBlobUrl){
+    try { URL.revokeObjectURL(activeBlobUrl); } catch(e){}
+    activeBlobUrl = null;
+  }
+
+  heading.textContent = d.title || 'Document Preview';
+  sub.textContent = d.note || (d.fileType + ' Document');
+  icon.textContent = (d.fileType && d.fileType.indexOf('IMG') >= 0) ? '🖼️' : '📄';
+
+  var rawUrl = getDocDownloadUrl(d);
+  var gDrive = parseGoogleDriveUrl(rawUrl);
+
+  tabBtn.style.display = (!rawUrl || rawUrl.startsWith('mailto:')) ? 'none' : 'inline-flex';
+  downBtn.style.display = 'inline-flex';
+
+  if(!rawUrl || rawUrl.startsWith('mailto:')){
+    var mailLink = rawUrl || ('mailto:' + (DATA.contact.email || 'emammasum727178@gmail.com') + '?subject=' + encodeURIComponent('Request: ' + d.title));
+    body.innerHTML = '<div class="doc-modal-fallback">' +
+      '<div style="font-size:3rem; margin-bottom:12px;">📑</div>' +
+      '<h4>' + escapeHtml(d.title) + '</h4>' +
+      '<p style="margin-top:6px;">' + escapeHtml(d.note || 'This official credential document is ready to be dispatched upon verified request.') + '</p>' +
+      '<div style="margin-top:20px;">' +
+        '<a class="btn-primary" style="padding:10px 20px; text-decoration:none;" href="' + mailLink + '">✉️ Dispatch Direct Email Request</a>' +
+      '</div>' +
+    '</div>';
+    downBtn.style.display = 'none';
+  } else if(gDrive){
+    body.innerHTML = '<iframe src="' + gDrive.previewUrl + '" allow="autoplay" style="width:100%; height:100%; border:none; background:#fff;" title="' + escapeHtml(d.title) + '"></iframe>';
+  } else if(rawUrl.startsWith('data:')){
+    activeBlobUrl = base64ToBlobUrl(rawUrl);
+    if(rawUrl.indexOf('image/') >= 0){
+      body.innerHTML = '<img src="' + rawUrl + '" class="doc-modal-img" alt="' + escapeHtml(d.title) + '">';
+    } else if(activeBlobUrl){
+      body.innerHTML = '<iframe src="' + activeBlobUrl + '#toolbar=0&navpanes=0" style="width:100%; height:100%; border:none; background:#fff;"></iframe>';
+    } else {
+      body.innerHTML = '<div class="doc-modal-fallback"><h4>' + escapeHtml(d.title) + '</h4><p>File ready. Use Download button to save.</p></div>';
+    }
+  } else if(rawUrl.match(/\.(jpeg|jpg|gif|png|webp|svg)($|\?)/i)){
+    body.innerHTML = '<img src="' + rawUrl + '" class="doc-modal-img" alt="' + escapeHtml(d.title) + '">';
+  } else {
+    var viewerUrl = 'https://docs.google.com/viewer?embedded=true&url=' + encodeURIComponent(rawUrl);
+    body.innerHTML = '<iframe src="' + viewerUrl + '" style="width:100%; height:100%; border:none; background:#fff;" title="' + escapeHtml(d.title) + '"></iframe>';
+  }
+
+  modal.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDocModal(){
+  var modal = document.getElementById('doc-preview-modal');
+  if(modal) modal.classList.add('hidden');
+  document.body.style.overflow = '';
+  var body = document.getElementById('doc-modal-body');
+  if(body) body.innerHTML = '';
+  if(activeBlobUrl){
+    try { URL.revokeObjectURL(activeBlobUrl); } catch(e){}
+    activeBlobUrl = null;
+  }
+}
+
+function openCurrentDocInNewTab(){
+  if(!currentViewingDoc) return;
+  var rawUrl = getDocDownloadUrl(currentViewingDoc);
+  if(!rawUrl) return;
+
+  if(rawUrl.startsWith('mailto:')){
+    window.location.href = rawUrl;
+    return;
+  }
+
+  if(rawUrl.startsWith('data:')){
+    var blobUrl = activeBlobUrl || base64ToBlobUrl(rawUrl);
+    if(blobUrl){
+      window.open(blobUrl, '_blank', 'noopener,noreferrer');
+    }
+    return;
+  }
+
+  window.open(rawUrl, '_blank', 'noopener,noreferrer');
+}
+
+function downloadCurrentDoc(){
+  if(!currentViewingDoc) return;
+  triggerDocDownload(currentViewingDoc);
+}
+
+function directDownloadDoc(idx, evt){
+  if(evt) evt.stopPropagation();
+  var d = (DATA.downloads && DATA.downloads[idx]) ? DATA.downloads[idx] : null;
+  if(!d) return;
+  triggerDocDownload(d);
+}
+
+function triggerDocDownload(d){
+  var rawUrl = getDocDownloadUrl(d);
+  if(!rawUrl || rawUrl.startsWith('mailto:')){
+    var mailLink = rawUrl || ('mailto:' + (DATA.contact.email || 'emammasum727178@gmail.com') + '?subject=' + encodeURIComponent('Request: ' + d.title));
+    window.location.href = mailLink;
+    showToast('Opening email dispatch for document request...', 'ok');
+    return;
+  }
+
+  var fileName = (d.title || 'document').replace(/[^a-zA-Z0-9_\-\.]/g, '_');
+  if(!fileName.toLowerCase().endsWith('.pdf') && (d.fileType || '').toUpperCase().indexOf('PDF') >= 0){
+    fileName += '.pdf';
+  }
+
+  var gDrive = parseGoogleDriveUrl(rawUrl);
+  if(gDrive){
+    var a = document.createElement('a');
+    a.href = gDrive.downloadUrl;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    showToast('Starting Google Drive download...', 'ok');
+    return;
+  }
+
+  if(rawUrl.startsWith('data:')){
+    var blobUrl = base64ToBlobUrl(rawUrl);
+    if(blobUrl){
+      var a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function(){ URL.revokeObjectURL(blobUrl); }, 15000);
+      showToast('Downloading ' + d.title + '...', 'ok');
+      return;
+    }
+  }
+
+  var a = document.createElement('a');
+  a.href = rawUrl;
+  a.download = fileName;
+  a.target = '_blank';
+  a.rel = 'noopener noreferrer';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  showToast('Opening download for ' + d.title + '...', 'ok');
+}
+
+// Add escape key handler to close document modal
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape'){
+    closeDocModal();
+  }
+});
+
+/* ==========================================================================
+   SMART ADMIN PANEL (MODIFY EACH & EVERYTHING WITH LIVE SEARCH & TOOLBAR)
+   ========================================================================== */
+var ADMIN_NAV_GROUPS = [
+  { title:'Overview', items:[['dashboard','Dashboard','📊']] },
+  { title:'Identity & Story', items:[['hero','Hero Section','🚀'],['about','About Me (Paragraphs)','📖'],['personalDetails','Personal Details','👤']] },
+  { title:'AI & Voice', items:[['ai','Voice & AI Core','🎙️']] },
+  { title:'Portfolio Data', items:[['projects','Projects & IoT','💻'],['skills','Skills Matrix','⚡'],['education','Education','🎓'],['experience','Experience','💼'],['awards','Awards & Honors','🏆'],['downloads','Qualifications & CV','📄'],['learning','Learning Track','🧠'],['references','References','👥']] },
+  { title:'Communication', items:[['contact','Contact & Socials','📞'],['feedback','Feedback Inbox','💬']] },
+  { title:'Appearance & System', items:[['theme','Theme & Aesthetics','🎨'],['security','Admin Password','🔐'],['data','Data Tools & Sync','💾']] }
+];
+
+var ITEM_FIELD_MAP = {
+  education: [{key:'degree'},{key:'institution'},{key:'duration'},{key:'result'},{key:'details',type:'textarea'}],
+  experience: [{key:'role'},{key:'org'},{key:'duration'},{key:'description',type:'textarea'}],
+  projects: [{key:'title'},{key:'category'},{key:'techStack'},{key:'description',type:'textarea'},{key:'repoLink'},{key:'demoLink'},{key:'videoUrl'},{key:'imageUrl',label:'Image URL or upload below'},{key:'imageUrl',type:'fileupload',accept:'image/*',label:'Upload project image'}],
+  skills: [{key:'category'},{key:'items',type:'textarea'}],
+  awards: [{key:'title'},{key:'issuer'},{key:'year'},{key:'description',type:'textarea'}],
+  downloads: [{key:'title'},{key:'note'},{key:'fileType'},{key:'fileUrl',label:'External Link (Drive/Dropbox/YouTube)'},{key:'uploadedFile',type:'fileupload',accept:'.pdf,.doc,.docx,.ppt,.pptx,.zip,.mp4,.mp3'}],
+  learning: [{key:'title'},{key:'provider'},{key:'status'},{key:'description',type:'textarea'}],
+  references: [{key:'name'},{key:'designation'},{key:'organization'},{key:'phone'},{key:'email'},{key:'relation'}]
+};
+
+var currentAdminSection = 'dashboard';
+
+function openAdmin(){
+  if(sessionStorage.getItem('masum_admin') === '1'){
+    document.getElementById('admin-panel').classList.remove('hidden');
+    renderAdminLayout();
+  } else {
+    openAdminLoginModal();
+  }
+}
+
+function openAdminLoginModal(){
+  var modal = document.getElementById('admin-login-modal');
+  if(!modal) return;
+  var err = document.getElementById('admin-login-err');
+  if(err){ err.style.display = 'none'; err.textContent = ''; }
+  var inp = document.getElementById('admin-login-input');
+  if(inp){ inp.value = ''; inp.type = 'password'; }
+  var btn = document.getElementById('admin-pass-toggle-btn');
+  if(btn){ btn.textContent = '👁️ Show'; }
+  var box = document.getElementById('forgot-password-box');
+  if(box){ box.style.display = 'none'; }
+  modal.classList.remove('hidden');
+  setTimeout(function(){ if(inp) inp.focus(); }, 120);
+}
+
+function closeAdminLoginModal(){
+  var modal = document.getElementById('admin-login-modal');
+  if(modal) modal.classList.add('hidden');
+}
+
+function toggleAdminPassVisibility(){
+  var inp = document.getElementById('admin-login-input');
+  var btn = document.getElementById('admin-pass-toggle-btn');
+  if(!inp || !btn) return;
+  if(inp.type === 'password'){
+    inp.type = 'text';
+    btn.textContent = '🔒 Hide';
+  } else {
+    inp.type = 'password';
+    btn.textContent = '👁️ Show';
+  }
+}
+
+function toggleForgotPasswordBox(){
+  var box = document.getElementById('forgot-password-box');
+  if(!box) return;
+  var isHidden = (box.style.display === 'none' || !box.style.display);
+  box.style.display = isHidden ? 'block' : 'none';
+}
+
+function handleAdminLoginSubmit(e){
+  if(e && e.preventDefault) e.preventDefault();
+  var inp = document.getElementById('admin-login-input');
+  var err = document.getElementById('admin-login-err');
+  var entered = (inp ? inp.value : '').trim();
+  var correct = getAdminPassword();
+  if(entered && entered === correct){
+    sessionStorage.setItem('masum_admin', '1');
+    closeAdminLoginModal();
+    document.getElementById('admin-panel').classList.remove('hidden');
+    renderAdminLayout();
+    showToast('Welcome back, Masum! Admin unlocked.', 'ok');
+  } else {
+    if(err){
+      err.textContent = 'Incorrect password. Try again or check Firebase option below.';
+      err.style.display = 'block';
+    }
+    if(inp){
+      inp.classList.add('shake');
+      setTimeout(function(){ inp.classList.remove('shake'); }, 500);
+      inp.focus();
+    }
+  }
+}
+
+function syncPasswordFromFirebaseUI(){
+  var st = document.getElementById('forgot-pass-status');
+  if(st){ st.innerHTML = '<span style="color:var(--primary);">Connecting to Firebase Firestore...</span>'; }
+  fetchAdminPasswordFromFirebase().then(function(pass){
+    if(st){
+      st.innerHTML = '<span style="color:#84cc16; font-weight:700;">✓ Synced with Firebase cloud! Latest password active. Enter your password above to log in.</span>';
+    }
+    var inp = document.getElementById('admin-login-input');
+    if(inp){ inp.value = ''; inp.focus(); }
+    showToast('Firebase cloud password synced!', 'ok');
+  }).catch(function(e){
+    if(st){
+      st.innerHTML = '<span style="color:#ef4444;">Could not sync: ' + escapeHtml(e.message || String(e)) + '</span>';
+    }
+  });
+}
+
+function closeAdmin(){
+  document.getElementById('admin-panel').classList.add('hidden');
+  render();
+}
+
+function renderAdminLayout(){
+  var panel = document.getElementById('admin-panel');
+  var navButtonsHtml = ADMIN_NAV_GROUPS.map(function(g){
+    return '<div class="admin-nav-group-title">'+g.title+'</div>' +
+      g.items.map(function(it){
+        return '<button class="'+(it[0]===currentAdminSection?'active':'')+'" onclick="renderAdminSection(\''+it[0]+'\')">' +
+          '<span>'+it[2]+'</span> ' + it[1] +
+        '</button>';
+      }).join('');
+  }).join('');
+
+  panel.innerHTML = '<div class="admin-header">' +
+    '<div class="admin-brand-title">' +
+      '<span>MD EMAM MASUM CMS</span> <span class="admin-brand-badge">ADMIN v2.0</span>' +
+    '</div>' +
+    '<div class="admin-header-tools">' +
+      '<input class="admin-search-input" id="admin-search-box" placeholder="Search admin..." oninput="filterAdminNav(this.value)">' +
+      '<button class="btn-ghost" style="padding:6px 12px; font-size:.8rem;" onclick="testPreviewLive()">Preview Live Site</button>' +
+      '<button class="btn-primary" style="padding:6px 14px; font-size:.8rem;" onclick="saveToFirebase()">Upload &amp; Save</button>' +
+      '<button class="btn-ghost" style="padding:6px 10px; font-size:.8rem;" onclick="closeAdmin()">✕ Close</button>' +
+    '</div>' +
+  '</div>' +
+  '<div class="admin-layout">' +
+    '<div class="admin-side" id="admin-side-nav">' + navButtonsHtml + '</div>' +
+    '<div class="admin-content">' +
+      '<div class="admin-toolbar">' +
+        '<div id="cloud-status">Checking Firebase cloud state...</div>' +
+        '<div class="admin-toolbar-actions">' +
+          '<button class="btn-primary" style="padding:6px 14px; font-size:.8rem;" onclick="saveToFirebase()">Upload &amp; Save</button>' +
+          '<button class="btn-ghost" style="padding:6px 12px; font-size:.8rem;" onclick="undoLocalChanges()">Undo</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="admin-main" id="admin-main"></div>' +
+    '</div>' +
+  '</div>';
+
+  renderAdminSection(currentAdminSection);
+  updateCloudStatus();
+}
+
+function filterAdminNav(term){
+  term = (term||'').toLowerCase();
+  var btns = document.querySelectorAll('#admin-side-nav button');
+  btns.forEach(function(b){
+    var text = b.textContent.toLowerCase();
+    b.style.display = text.indexOf(term) >= 0 ? '' : 'none';
+  });
+}
+
+function testPreviewLive(){
+  saveData();
+  render();
+  showToast('Live site updated with your current edits. Check in background!', 'ok');
+}
+
+function renderAdminSection(name){
+  currentAdminSection = name;
+  var main = document.getElementById('admin-main');
+  if(!main){ renderAdminLayout(); return; }
+
+  document.querySelectorAll('#admin-side-nav button').forEach(function(b){ b.classList.remove('active'); });
+  var activeBtn = document.querySelector('#admin-side-nav button[onclick*="\''+name+'\'"]');
+  if(activeBtn) activeBtn.classList.add('active');
+
+  if(ITEM_FIELD_MAP[name]){
+    var topExtraHtml = '';
+    if(name === 'downloads'){
+      var isVis = DATA.qualificationsVisible !== false;
+      topExtraHtml = '<div style="background:var(--surface2); border:1.5px solid var(--border-strong); border-radius:14px; padding:18px 20px; margin-bottom:20px;">' +
+        '<div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:14px;">' +
+          '<div>' +
+            '<b style="font-size:1.05rem; display:block; color:var(--text);">Qualifications Section Visibility</b>' +
+            '<span style="font-size:.82rem; color:var(--muted);">Location on site: <strong>Directly Above "About Me"</strong> | Status: <strong style="color:'+(isVis?'#22c55e':'#ef4444')+';">'+(isVis?'🟢 VISIBLE (SHOWING)':'🔴 HIDDEN')+'</strong></span>' +
+          '</div>' +
+          '<div>' +
+            '<button class="btn-primary" style="padding:8px 18px; font-size:.84rem; background:'+(isVis?'#ef4444':'#22c55e')+'; border-color:'+(isVis?'#ef4444':'#22c55e')+';" onclick="toggleQualificationsVisibility()">' +
+              (isVis ? '👁️‍🗨️ Click to Hide Section' : '👁️ Click to Show Section') +
+            '</button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="form-field" style="margin-bottom:0;">' +
+          '<label style="font-size:.78rem; text-transform:uppercase; letter-spacing:.05em;">Section Display Heading</label>' +
+          '<div style="display:flex; gap:8px;">' +
+            '<input id="qual-title-input" value="'+escapeHtml(DATA.qualificationsTitle || 'Check My Qualifications Here')+'" style="flex:1;">' +
+            '<button class="btn-ghost" style="padding:6px 14px; font-size:.8rem;" onclick="updateQualificationsTitle(document.getElementById(\'qual-title-input\').value)">Save Heading</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }
+
+    main.innerHTML = '<div class="admin-card-box">' +
+      topExtraHtml +
+      '<h3>' + (name === 'downloads' ? 'QUALIFICATIONS &amp; CV MANAGER' : name.toUpperCase() + ' MANAGER') + ' <button class="btn-primary" style="padding:6px 14px; font-size:.8rem;" onclick="editAdminItem(\''+name+'\',-1)">+ Add New Item</button></h3>' +
+      '<div id="admin-list"></div>' +
+    '</div>';
+    renderAdminList(name);
+  } else if(name==='dashboard'){
+    renderAdminDashboard(main);
+  } else if(name==='hero'){
+    renderAdminHero(main);
+  } else if(name==='about'){
+    renderAdminAbout(main);
+  } else if(name==='ai'){
+    renderAdminAI(main);
+  } else if(name==='personalDetails'){
+    main.innerHTML = '<div class="admin-card-box"><h3>PERSONAL DETAILS</h3>' +
+      adminSimpleForm('personalDetails', Object.keys(DATA.personalDetails).map(function(k){return {key:k};})) +
+    '</div>';
+  } else if(name==='contact'){
+    main.innerHTML = '<div class="admin-card-box"><h3>CONTACT &amp; SOCIAL LINKS</h3>' +
+      adminSimpleForm('contact', Object.keys(DATA.contact).map(function(k){return {key:k};})) +
+    '</div>';
+  } else if(name==='feedback'){
+    renderAdminFeedback(main);
+  } else if(name==='theme'){
+    renderAdminTheme(main);
+  } else if(name==='security'){
+    renderAdminSecurity(main);
+  } else if(name==='data'){
+    renderAdminData(main);
+  }
+}
+
+function toggleQualificationsVisibility(){
+  DATA.qualificationsVisible = DATA.qualificationsVisible === false ? true : false;
+  saveData();
+  renderAdminSection('downloads');
+  render();
+  renderNav();
+  saveToFirebase({ quiet: true }).catch(function(e){ console.warn('Sync qual state warning:', e); });
+  showToast(DATA.qualificationsVisible ? 'Qualifications section is now VISIBLE on site.' : 'Qualifications section is now HIDDEN from site.', 'ok');
+}
+
+function updateQualificationsTitle(val){
+  DATA.qualificationsTitle = (val || 'Check My Qualifications Here').trim();
+  saveData();
+  render();
+  saveToFirebase({ quiet: true }).catch(function(e){ console.warn('Sync qual title warning:', e); });
+  showToast('Qualifications title updated.', 'ok');
+}
+
+function renderAdminDashboard(main){
+  var projCount = (DATA.projects||[]).length;
+  var iotCount = (DATA.projects||[]).filter(isIoTProject).length;
+  var fbCount = (DATA.feedback||[]).length;
+  var eduCount = (DATA.education||[]).length;
+
+  main.innerHTML = '<div class="admin-card-box">' +
+    '<h3>DASHBOARD OVERVIEW</h3>' +
+    '<p style="color:var(--muted); font-size:.9rem; margin-bottom:16px;">Welcome to your central control panel. Modify each and every element of your portfolio dynamically with instant sync.</p>' +
+    '<div class="grid-4" style="margin-bottom:20px;">' +
+      '<div class="stat-card"><b>'+projCount+'</b><span>TOTAL PROJECTS</span></div>' +
+      '<div class="stat-card"><b>'+iotCount+'</b><span>IOT BUILDS</span></div>' +
+      '<div class="stat-card"><b>'+eduCount+'</b><span>DEGREES/CERTS</span></div>' +
+      '<div class="stat-card"><b>'+fbCount+'</b><span>FEEDBACK REVIEWS</span></div>' +
+    '</div>' +
+    '<div class="btn-row">' +
+      '<button class="btn-primary" onclick="renderAdminSection(\'hero\')">Edit Hero</button>' +
+      '<button class="btn-primary" onclick="renderAdminSection(\'about\')">Edit About Paragraphs</button>' +
+      '<button class="btn-primary" onclick="renderAdminSection(\'ai\')">AI &amp; Voice Settings</button>' +
+      '<button class="btn-ghost" onclick="renderAdminSection(\'projects\')">Manage Projects</button>' +
+    '</div>' +
+  '</div>';
+}
+
+function renderAdminHero(main){
+  var h = DATA.hero || {};
+  main.innerHTML = '<div class="admin-card-box">' +
+    '<h3>HERO SECTION SETTINGS</h3>' +
+    '<div class="form-field"><label>Full Name</label><input value="'+escapeHtml(h.name)+'" oninput="DATA.hero.name=this.value;saveData();"></div>' +
+    '<div class="form-field"><label>Professional Role / Subtitle</label><input value="'+escapeHtml(h.role)+'" oninput="DATA.hero.role=this.value;saveData();"></div>' +
+    '<div class="form-field"><label>Status Badge / University</label><input value="'+escapeHtml(h.status)+'" oninput="DATA.hero.status=this.value;saveData();"></div>' +
+    '<div class="form-field"><label>Greeting Pill Text</label><input value="'+escapeHtml(h.greetingPill)+'" oninput="DATA.hero.greetingPill=this.value;saveData();"></div>' +
+    '<div class="form-field"><label>Contact Email</label><input value="'+escapeHtml(h.email)+'" oninput="DATA.hero.email=this.value;saveData();"></div>' +
+    '<div class="grid-2">' +
+      '<div class="form-field"><label>Primary Button Text</label><input value="'+escapeHtml(h.cta1Text||'View Projects')+'" oninput="DATA.hero.cta1Text=this.value;saveData();"></div>' +
+      '<div class="form-field"><label>Primary Button Link</label><input value="'+escapeHtml(h.cta1Link||'#projects')+'" oninput="DATA.hero.cta1Link=this.value;saveData();"></div>' +
+    '</div>' +
+    '<div class="grid-4" style="margin-top:10px;">' +
+      '<div class="form-field"><label>Stat 1 Value</label><input value="'+escapeHtml(h.stat1Val||'9+')+'" oninput="DATA.hero.stat1Val=this.value;saveData();"></div>' +
+      '<div class="form-field"><label>Stat 1 Label</label><input value="'+escapeHtml(h.stat1Label||'PROJECTS')+'" oninput="DATA.hero.stat1Label=this.value;saveData();"></div>' +
+      '<div class="form-field"><label>Stat 2 Value</label><input value="'+escapeHtml(h.stat2Val||'3+')+'" oninput="DATA.hero.stat2Val=this.value;saveData();"></div>' +
+      '<div class="form-field"><label>Stat 2 Label</label><input value="'+escapeHtml(h.stat2Label||'IOT BUILDS')+'" oninput="DATA.hero.stat2Label=this.value;saveData();"></div>' +
+    '</div>' +
+    '<div class="form-field" style="margin-top:14px;"><label>Terminal Typing Lines (one per line)</label>' +
+      '<textarea rows="4" oninput="updateHeroTyping(this.value)">'+escapeHtml((h.typingMessages||[]).join('\n'))+'</textarea>' +
+    '</div>' +
+    '<div class="form-field"><label>Upload Avatar Photo</label><input type="file" accept="image/*" onchange="heroPhotoUpload(event)"></div>' +
+    (h.photo ? '<img src="'+h.photo+'" style="width:130px; border-radius:12px; margin-top:8px;">' : '') +
+  '</div>';
+}
+function updateHeroTyping(val){
+  DATA.hero.typingMessages = val.split('\n').map(function(s){return s.trim();}).filter(Boolean);
+  saveData();
+}
+
+function renderAdminAbout(main){
+  var a = DATA.about || {};
+  main.innerHTML = '<div class="admin-card-box">' +
+    '<h3>ABOUT ME DETAILED PARAGRAPHIC STORY</h3>' +
+    '<div class="form-field"><label>Section Title</label><input value="'+escapeHtml(a.heading||'About Me')+'" oninput="DATA.about.heading=this.value;saveData();"></div>' +
+    '<div class="form-field"><label>Paragraph 1: Professional Identity &amp; Academic Foundation</label>' +
+      '<textarea rows="4" oninput="DATA.about.p1=this.value;saveData();">'+escapeHtml(a.p1||a.bio)+'</textarea>' +
+    '</div>' +
+    '<div class="form-field"><label>Paragraph 2: The Engineering Journey &amp; AgroSense Hardware Odyssey</label>' +
+      '<textarea rows="4" oninput="DATA.about.p2=this.value;saveData();">'+escapeHtml(a.p2||'')+'</textarea>' +
+    '</div>' +
+    '<div class="form-field"><label>Paragraph 3: Full-Stack Web &amp; Embedded Systems Craftsmanship</label>' +
+      '<textarea rows="4" oninput="DATA.about.p3=this.value;saveData();">'+escapeHtml(a.p3||'')+'</textarea>' +
+    '</div>' +
+    '<div class="form-field"><label>Paragraph 4: Work Ethic, Discipline &amp; Future Vision</label>' +
+      '<textarea rows="4" oninput="DATA.about.p4=this.value;saveData();">'+escapeHtml(a.p4||'')+'</textarea>' +
+    '</div>' +
+  '</div>';
+}
+
+function renderAdminAI(main){
+  var ai = DATA.ai || {};
+  main.innerHTML = '<div class="admin-card-box">' +
+    '<h3>AI ASSISTANT &amp; VOICE WELCOME CONFIGURATION</h3>' +
+    '<p style="color:var(--muted); font-size:.85rem; margin-bottom:14px;">The AI assistant speaks on your behalf. You can customize the voice welcome greeting text, speech speed, pitch, and Gemini model parameters here.</p>' +
+    '<div class="form-field"><label>Welcome Voice Speech Text (Spoken to visitors on your behalf)</label>' +
+      '<textarea rows="3" oninput="DATA.ai.welcomeVoiceText=this.value;saveData();">'+escapeHtml(ai.welcomeVoiceText||'')+'</textarea>' +
+    '</div>' +
+    '<div class="btn-row" style="margin-bottom:16px;">' +
+      '<button class="btn-primary" onclick="speakAI(DATA.ai.welcomeVoiceText)">🔊 Test Play Voice Greeting</button>' +
+      '<button class="btn-ghost" onclick="stopAISpeech()">⏹️ Stop Speech</button>' +
+    '</div>' +
+    '<div class="grid-2">' +
+      '<div class="form-field"><label>Voice Speech Rate ('+(ai.voiceRate||1.0)+')</label><input type="range" min="0.7" max="1.3" step="0.05" value="'+(ai.voiceRate||1.0)+'" onchange="DATA.ai.voiceRate=parseFloat(this.value);saveData();"></div>' +
+      '<div class="form-field"><label>Voice Pitch ('+(ai.voicePitch||1.0)+')</label><input type="range" min="0.7" max="1.3" step="0.05" value="'+(ai.voicePitch||1.0)+'" onchange="DATA.ai.voicePitch=parseFloat(this.value);saveData();"></div>' +
+    '</div>' +
+    '<div class="form-field"><label>Gemini API Key</label><input type="password" value="'+escapeHtml(ai.apiKey||'')+'" oninput="DATA.ai.apiKey=this.value;saveData();"></div>' +
+    '<div class="form-field"><label>Gemini Model</label><input value="'+escapeHtml(ai.model||'gemini-3.8-flash')+'" oninput="DATA.ai.model=this.value;saveData();"></div>' +
+    '<div class="form-field"><label>Assistant Name</label><input value="'+escapeHtml(ai.assistantName||'EMAM-AI')+'" oninput="DATA.ai.assistantName=this.value;saveData();"></div>' +
+    '<div class="form-field"><label>Assistant Persona &amp; Tone</label><textarea rows="3" oninput="DATA.ai.persona=this.value;saveData();">'+escapeHtml(ai.persona||'')+'</textarea></div>' +
+    '<div class="form-field"><label>Extra Knowledge Base</label><textarea rows="3" oninput="DATA.ai.extraKnowledge=this.value;saveData();">'+escapeHtml(ai.extraKnowledge||'')+'</textarea></div>' +
+  '</div>';
+}
+
+function renderAdminTheme(main){
+  var th = DATA.theme || {};
+  main.innerHTML = '<div class="admin-card-box">' +
+    '<h3>THEME &amp; AESTHETICS CUSTOMIZATION</h3>' +
+    '<p style="color:var(--muted); font-size:.85rem; margin-bottom:14px;">Toggle dark/light mode and customize your primary accent colors.</p>' +
+    '<div class="btn-row" style="margin-bottom:16px;">' +
+      '<button class="btn-primary" onclick="toggleTheme()">Toggle Current Mode ('+(th.mode||'dark').toUpperCase()+')</button>' +
+    '</div>' +
+  '</div>';
+}
+
+function renderAdminSecurity(main){
+  var currentPass = getAdminPassword();
+  main.innerHTML = '<div class="admin-card-box">' +
+    '<h3>ADMIN SECURITY &amp; FIREBASE SYNC</h3>' +
+    '<p style="color:var(--muted); font-size:.85rem; margin-bottom:16px;">Manage your Admin Panel password. When you update it here, it is automatically pushed to Firebase Firestore (<code>site/security</code> &amp; <code>site/content</code>), ensuring your new password works instantly on any device or browser.</p>' +
+    
+    '<div style="background:var(--surface2); padding:14px; border-radius:12px; margin-bottom:16px; border:1px solid var(--border);">' +
+      '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">' +
+        '<span style="font-size:.8rem; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:0.04em;">Current Active Password</span>' +
+        '<button type="button" class="btn-ghost" style="padding:2px 8px; font-size:.75rem;" onclick="toggleCurrentPassView()"><span id="curr-pass-btn-txt">👁️ Reveal</span></button>' +
+      '</div>' +
+      '<div id="current-pass-display" data-shown="0" style="font-family:monospace; font-size:1.05rem; color:var(--primary); letter-spacing:0.08em; font-weight:700;">••••••••••••</div>' +
+      '<div style="font-size:.74rem; color:var(--muted); margin-top:6px;">Cloud location: <code style="color:var(--neon2);">Firestore &rarr; site &rarr; security &rarr; adminPass</code></div>' +
+    '</div>' +
+
+    '<div class="form-field"><label>Set New Admin Password</label><input id="new-admin-pass" type="password" placeholder="Enter new password"></div>' +
+    '<div class="btn-row" style="margin-top:14px;">' +
+      '<button class="btn-primary" onclick="saveNewPassword()">💾 Update &amp; Sync to Firebase</button>' +
+      '<a class="btn-ghost" href="https://console.firebase.google.com/project/portfoliomasum-m/firestore" target="_blank" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px;">🔗 Open Firebase Console</a>' +
+    '</div>' +
+    '<div id="pass-update-msg" style="margin-top:12px; font-size:.82rem;"></div>' +
+  '</div>';
+}
+
+function toggleCurrentPassView(){
+  var el = document.getElementById('current-pass-display');
+  var btn = document.getElementById('curr-pass-btn-txt');
+  if(!el) return;
+  if(el.getAttribute('data-shown') === '1'){
+    el.textContent = '••••••••••••';
+    el.setAttribute('data-shown', '0');
+    if(btn) btn.textContent = '👁️ Reveal';
+  } else {
+    el.textContent = getAdminPassword();
+    el.setAttribute('data-shown', '1');
+    if(btn) btn.textContent = '🔒 Hide';
+  }
+}
+
+function saveNewPassword(){
+  var val = (document.getElementById('new-admin-pass').value || '').trim();
+  var msg = document.getElementById('pass-update-msg');
+  if(!val){
+    showToast('Password cannot be empty', 'warn');
+    if(msg) msg.innerHTML = '<span style="color:#ef4444;">Please enter a valid password.</span>';
+    return;
+  }
+  setAdminPassword(val);
+  showToast('Admin password updated and synced to Firebase!', 'ok');
+  if(msg) msg.innerHTML = '<span style="color:#84cc16; font-weight:700;">✓ Password updated to "'+escapeHtml(val)+'" and synced to Firebase Firestore!</span>';
+  var disp = document.getElementById('current-pass-display');
+  if(disp && disp.getAttribute('data-shown') === '1') disp.textContent = val;
+  var inp = document.getElementById('new-admin-pass');
+  if(inp) inp.value = '';
+}
+
+function renderAdminFeedback(main){
+  var fbs = DATA.feedback || [];
+  main.innerHTML = '<div class="admin-card-box">' +
+    '<h3>FEEDBACK INBOX ('+fbs.length+')</h3>' +
+    (fbs.length ? fbs.map(function(f,i){
+      return '<div class="admin-item-row"><div><b>'+escapeHtml(f.name)+'</b> ('+f.rating+'/5 ⭐) — <small>'+(f.email?escapeHtml(f.email):'No email')+'</small><br>'+escapeHtml(f.message)+'</div>' +
+        '<button onclick="deleteFeedback('+i+')">Delete</button></div>';
+    }).join('') : '<p style="color:var(--muted);">No feedback received yet.</p>') +
+  '</div>';
+}
+function deleteFeedback(i){
+  DATA.feedback.splice(i,1); saveData(); renderAdminSection('feedback');
+}
+
+function renderAdminData(main){
+  main.innerHTML = '<div class="admin-card-box">' +
+    '<h3>DATA TOOLS &amp; BACKUP</h3>' +
+    '<div class="btn-row">' +
+      '<button class="btn-primary" onclick="exportData()">Export Full JSON Backup</button>' +
+      '<button class="btn-ghost" onclick="resetToDefaults()">Reset to Defaults</button>' +
+    '</div>' +
+    '<div class="form-field" style="margin-top:18px;"><label>Import JSON Data</label><textarea id="import-json" rows="5" placeholder="Paste exported JSON here..."></textarea></div>' +
+    '<button class="btn-primary" onclick="importData()">Import &amp; Apply</button>' +
+  '</div>';
+}
+function exportData(){
+  var blob = new Blob([JSON.stringify(DATA, null, 2)], {type:'application/json'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'masum_portfolio_backup_' + Date.now() + '.json';
+  a.click();
+}
+function importData(){
+  try{
+    var parsed = JSON.parse(document.getElementById('import-json').value);
+    DATA = mergeDefaults(parsed);
+    saveData(); applyTheme(); render(); renderAdminLayout();
+    alert('Data imported successfully.');
+  }catch(e){ alert('Invalid JSON format.'); }
+}
+function resetToDefaults(){
+  if(!confirm('Reset all content to default preset? This will overwrite local draft.')) return;
+  DATA = cloneData(DEFAULT_DATA);
+  saveData(); applyTheme(); render(); renderAdminLayout();
+  showToast('Reset to default preset.', 'ok');
+}
+
+function adminSimpleForm(objKey, fields){
+  var obj = DATA[objKey] || {};
+  var html = '';
+  fields.forEach(function(f){
+    var val = obj[f.key] || '';
+    var label = f.label || f.key;
+    if(f.type === 'textarea'){
+      html += '<div class="form-field"><label>'+label+'</label><textarea rows="3" oninput="DATA[\''+objKey+'\'][\''+f.key+'\']=this.value;saveData();" onchange="DATA[\''+objKey+'\'][\''+f.key+'\']=this.value;saveData();">'+escapeHtml(val)+'</textarea></div>';
+    } else {
+      html += '<div class="form-field"><label>'+label+'</label><input value="'+escapeHtml(val)+'" oninput="DATA[\''+objKey+'\'][\''+f.key+'\']=this.value;saveData();" onchange="DATA[\''+objKey+'\'][\''+f.key+'\']=this.value;saveData();"></div>';
+    }
+  });
+  return html;
+}
+
+function renderAdminList(section){
+  var list = document.getElementById('admin-list');
+  if(!list) return;
+  var items = DATA[section] || [];
+  list.innerHTML = items.map(function(item, i){
+    var titleKey = Object.keys(item)[0];
+    return '<div class="admin-item-row"><span>'+escapeHtml(item[titleKey])+'</span>' +
+      '<span><button onclick="editAdminItem(\''+section+'\','+i+')">Edit</button>' +
+      '<button onclick="deleteAdminItem(\''+section+'\','+i+')">Delete</button></span></div>';
+  }).join('') || '<p style="color:var(--muted); font-size:.9rem;">No items currently configured.</p>';
+}
+
+function editAdminItem(section, idx){
+  var fields = ITEM_FIELD_MAP[section];
+  var item = idx === -1 ? {} : (DATA[section][idx] || {});
+  var main = document.getElementById('admin-main');
+  var html = '<div class="admin-card-box"><h3>'+(idx===-1?'Add New':'Edit')+' '+section+'</h3>';
+  fields.forEach(function(f){
+    var val = item[f.key] || '';
+    var label = f.label || f.key;
+    if(f.type === 'textarea'){
+      html += '<div class="form-field"><label>'+label+'</label><textarea id="field-'+f.key+'" rows="3">'+escapeHtml(val)+'</textarea></div>';
+    } else if(f.type === 'fileupload'){
+      html += '<div class="form-field"><label>'+label+'</label><input type="file" accept="'+f.accept+'" onchange="genericFileFieldChange(event,\''+f.key+'\')">' +
+        '<input type="hidden" id="hidden-'+f.key+'" value="'+escapeHtml(val)+'"></div>';
+    } else {
+      html += '<div class="form-field"><label>'+label+'</label><input id="field-'+f.key+'" value="'+escapeHtml(val)+'"></div>';
+    }
+  });
+  html += '<div class="btn-row"><button class="btn-primary" onclick="saveAdminItem(\''+section+'\','+idx+')">💾 Save Item</button>' +
+    '<button class="btn-ghost" onclick="renderAdminSection(\''+section+'\')">Cancel</button></div></div>';
+  main.innerHTML = html;
+}
+
+function saveAdminItem(section, idx){
+  var fields = ITEM_FIELD_MAP[section];
+  var obj = idx === -1 ? {} : DATA[section][idx];
+  fields.forEach(function(f){
+    if(f.type === 'fileupload'){
+      var hid = document.getElementById('hidden-'+f.key);
+      if(hid && hid.value) obj[f.key] = hid.value;
+    } else {
+      var el = document.getElementById('field-'+f.key);
+      if(el) obj[f.key] = el.value;
+    }
+  });
+  if(idx === -1){ (DATA[section] = DATA[section] || []).push(obj); }
+  else { DATA[section][idx] = obj; }
+  saveData();
+  renderAdminSection(section);
+  render();
+  saveToFirebase({ quiet: true }).catch(function(e){ console.warn('Auto cloud sync:', e); });
+  showToast('Item saved & cloud synced!', 'ok');
+}
+
+function deleteAdminItem(section, idx){
+  if(!confirm('Delete this item?')) return;
+  DATA[section].splice(idx, 1);
+  saveData();
+  renderAdminSection(section);
+  render();
+  saveToFirebase({ quiet: true }).catch(function(e){ console.warn('Auto cloud sync:', e); });
+  showToast('Item deleted & cloud synced!', 'ok');
+}
+
+function compressImageFile(file, maxWidth, maxHeight, quality, callback){
+  var reader = new FileReader();
+  reader.onload = function(evt){
+    var img = new Image();
+    img.onload = function(){
+      var w = img.width;
+      var h = img.height;
+      if(w > maxWidth || h > maxHeight){
+        if(w > h){
+          h = Math.round((h * maxWidth) / w);
+          w = maxWidth;
+        } else {
+          w = Math.round((w * maxHeight) / h);
+          h = maxHeight;
+        }
+      }
+      var canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+      var ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      var dataUrl = canvas.toDataURL('image/jpeg', quality || 0.82);
+      callback(dataUrl);
+    };
+    img.src = evt.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function genericFileFieldChange(e, key){
+  var file = e.target.files[0];
+  if(!file) return;
+  if(file.type && file.type.indexOf('image') >= 0){
+    compressImageFile(file, 900, 900, 0.82, function(dataUrl){
+      var hid = document.getElementById('hidden-'+key);
+      if(hid) hid.value = dataUrl;
+      showToast('Image optimized & selected.', 'ok');
+    });
+  } else {
+    var reader = new FileReader();
+    reader.onload = function(evt){
+      var hid = document.getElementById('hidden-'+key);
+      if(hid) hid.value = evt.target.result;
+      showToast('File selected locally.', 'ok');
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+function heroPhotoUpload(e){
+  var file = e.target.files[0];
+  if(!file) return;
+  if(file.type && file.type.indexOf('image') >= 0){
+    showToast('Optimizing avatar image...', 'ok');
+    compressImageFile(file, 800, 800, 0.85, function(dataUrl){
+      DATA.hero.photo = dataUrl;
+      saveData();
+      renderAdminSection('hero');
+      render();
+      saveToFirebase({ quiet: true });
+      showToast('Hero photo updated & saved!', 'ok');
+    });
+  } else {
+    var reader = new FileReader();
+    reader.onload = function(evt){
+      DATA.hero.photo = evt.target.result;
+      saveData();
+      renderAdminSection('hero');
+      render();
+      saveToFirebase({ quiet: true });
+      showToast('Hero photo updated & saved!', 'ok');
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+/* ==========================================================================
+   MAIN RENDER & APPLICATION LIFECYCLE
+   ========================================================================== */
+function render(){
+  var showQual = DATA.qualificationsVisible !== false;
+  document.getElementById('app').innerHTML =
+    heroSection() +
+    (showQual ? qualificationsSection() : '') +
+    aboutSection() + educationSection() + projectsSection() +
+    skillsSection() + experienceSection() + awardsSection() +
+    learningSection() + gamesSection() + contactSection() + referencesSection();
+
+  document.getElementById('site-footer').innerHTML =
+    '<div class="social-row" style="justify-content:center;">' + socialRow() + '</div>' +
+    '<p style="margin-top:10px;">&copy; ' + new Date().getFullYear() + ' MD Emam Masum. All rights reserved.</p>' +
+    '<div style="margin-top:14px;"><button class="admin-quick-btn" style="padding:8px 18px; font-size:.84rem;" onclick="openAdmin()">🔐 Open Admin CMS Portal</button></div>';
+
+  initReveal();
+  initTypedLine();
+
+  var photo = (DATA.hero && DATA.hero.photo) || 'favicon.png';
+  var brandImg = document.getElementById('nav-brand-img');
+  if(brandImg && photo) brandImg.src = photo;
+}
+
+/* Auto Welcome on first visitor interaction */
+function setupVoiceWelcomeTrigger(){
+  function onFirstTouch(){
+    if(!voiceWelcomedThisSession){
+      setTimeout(function(){
+        showAIWelcome();
+        playWelcomeVoice(false);
+      }, 700);
+    }
+    window.removeEventListener('click', onFirstTouch);
+  }
+  window.addEventListener('click', onFirstTouch, { once: true, passive: true });
+}
+
+/* ==========================================================================
+   PWA INSTALLATION & SERVICE WORKER LIFECYCLE
+   ========================================================================== */
+var deferredPWAInstallPrompt = null;
+window.addEventListener('beforeinstallprompt', function(e){
+  e.preventDefault();
+  deferredPWAInstallPrompt = e;
+  var btns = document.querySelectorAll('.pwa-install-btn');
+  btns.forEach(function(b){ b.style.display = 'inline-flex'; });
+});
+
+window.addEventListener('appinstalled', function(){
+  deferredPWAInstallPrompt = null;
+  showToast('Masum OS App installed successfully! 🎉', 'ok');
+});
+
+function installPWA(){
+  if(deferredPWAInstallPrompt){
+    deferredPWAInstallPrompt.prompt();
+    deferredPWAInstallPrompt.userChoice.then(function(choiceResult){
+      if(choiceResult.outcome === 'accepted'){
+        showToast('Installing Masum OS App...', 'ok');
+      }
+      deferredPWAInstallPrompt = null;
+    });
+  } else {
+    var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    if(isIOS){
+      alert("To Install Masum OS on iPhone/iPad:\n\n1. Tap the Share button (square icon with arrow up at the bottom of Safari)\n2. Scroll down and tap 'Add to Home Screen'\n3. Tap 'Add' in the top right corner.");
+    } else {
+      showToast("To install, tap your browser's menu (⋮) and select 'Install app' or 'Add to Home screen'", 'ok');
+    }
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  applyTheme();
+  renderNav();
+  render();
+  initScrollspy();
+  initParticles();
+  setupVoiceWelcomeTrigger();
+
+  /* PWA Service Worker Registration */
+  if('serviceWorker' in navigator){
+    window.addEventListener('load', function(){
+      navigator.serviceWorker.register('/sw.js').then(function(reg){
+        console.log('PWA ServiceWorker registered with scope:', reg.scope);
+      }).catch(function(err){
+        console.warn('PWA ServiceWorker registration error:', err);
+      });
+    });
+  }
+
+  /* Direct URL hash & shortcut listener for Admin */
+  if(window.location.hash === '#admin' || window.location.search.indexOf('admin') >= 0){
+    setTimeout(openAdmin, 350);
+  }
+  window.addEventListener('hashchange', function(){
+    if(window.location.hash === '#admin') openAdmin();
+  });
+  window.addEventListener('keydown', function(e){
+    if(((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) || (e.altKey && (e.key === 'A' || e.key === 'a'))){
+      e.preventDefault();
+      openAdmin();
+    }
+  });
+
+  loadFromFirebase().then(function(ok){
+    if(ok){
+      applyTheme();
+      renderNav();
+      render();
+    }
+    updateCloudStatus();
+  });
+});
+</script>
+</body>
+</html>
